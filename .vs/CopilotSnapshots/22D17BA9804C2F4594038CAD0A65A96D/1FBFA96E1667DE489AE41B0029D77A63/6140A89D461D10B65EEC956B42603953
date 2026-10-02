@@ -1,0 +1,878 @@
+﻿window.StoreApp = (() => {
+    const api = {
+        async get(url) {
+            const response = await fetch(url, { credentials: "include" });
+            return parseResponse(response);
+        },
+        async send(url, method, body) {
+            const response = await fetch(url, {
+                method,
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: body ? JSON.stringify(body) : null
+            });
+            return parseResponse(response);
+        }
+    };
+
+    async function parseResponse(response) {
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!response.ok) {
+            throw new Error(data?.message || "Request failed");
+        }
+
+        return data;
+    }
+
+    function showAlert(id, message, type = "info") {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.className = `alert alert-${type}`;
+        el.textContent = message;
+        el.classList.remove("d-none");
+    }
+
+    function hideAlert(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add("d-none");
+    }
+
+    function formatLkr(value) {
+        return `LKR ${Number(value).toFixed(2)}`;
+    }
+
+    async function initProductsPage() {
+        const grid = document.getElementById("productsGrid");
+        if (!grid) return;
+
+        const mainCategoryFilter = document.getElementById("mainCategoryFilter");
+        const subCategoryFilter = document.getElementById("subCategoryFilter");
+        const genderFilter = document.getElementById("genderFilter");
+        const initialQuery = new URLSearchParams(window.location.search);
+        let categories = [];
+
+        const populateSubCategoryFilter = (mainCategoryName) => {
+            const selectedMain = categories.find(x => x.name === mainCategoryName);
+            const subCategories = selectedMain?.subCategories ?? [];
+            subCategoryFilter.innerHTML = `<option value="">All subcategories</option>${subCategories.map(s => `<option value="${s}">${s}</option>`).join("")}`;
+        };
+
+        const loadCategoryFilters = async () => {
+            categories = await api.get("/api/products/categories");
+            mainCategoryFilter.innerHTML = `<option value="">All main categories</option>${categories.map(c => `<option value="${c.name}">${c.name}</option>`).join("")}`;
+
+            const initialMain = initialQuery.get("mainCategory") || "";
+            if (initialMain) {
+                mainCategoryFilter.value = initialMain;
+            }
+
+            populateSubCategoryFilter(mainCategoryFilter.value);
+
+            const initialSub = initialQuery.get("subcategory") || initialQuery.get("category") || "";
+            if (initialSub) {
+                subCategoryFilter.value = initialSub;
+            }
+        };
+
+        const loadProducts = async () => {
+            hideAlert("productsAlert");
+            const mainCategory = mainCategoryFilter.value;
+            const subCategory = subCategoryFilter.value;
+            const gender = genderFilter.value;
+            const query = new URLSearchParams();
+
+            if (mainCategory) query.set("mainCategory", mainCategory);
+            if (subCategory) query.set("subcategory", subCategory);
+            if (gender) query.set("gender", gender);
+
+            try {
+                const products = await api.get(`/api/products?${query.toString()}`);
+                grid.innerHTML = products.map(p => `
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card h-100">
+                            <img src="${p.imageUrl}" class="card-img-top" alt="${p.name}" style="height:220px;object-fit:cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${p.name}</h5>
+                                <p class="card-text small text-muted">${p.category} • ${p.gender}</p>
+                                <p class="card-text">${p.description}</p>
+                                <div class="mt-auto d-flex flex-column gap-2">
+                                    <select class="form-select form-select-sm" data-size-select="${p.id}" ${(p.sizes || []).length ? "" : "disabled"}>
+                                        ${(p.sizes || []).length
+                                            ? ["Small", "Medium", "Large", "XL"].map(size => {
+                                                const available = (p.sizes || []).some(s => s.size === size);
+                                                return `<option value="${size}" ${available ? "" : "disabled"}>${available ? size : `${size} - Out of stock`}</option>`;
+                                            }).join("")
+                                            : `<option value="">Out of stock</option>`}
+                                    </select>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                    <strong>${formatLkr(p.price)}</strong>
+                                    <button class="btn btn-sm btn-dark" data-product-id="${p.id}" ${(p.sizes || []).length ? "" : "disabled"}>Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`).join("");
+            } catch (e) {
+                showAlert("productsAlert", e.message, "danger");
+            }
+        };
+
+        mainCategoryFilter.addEventListener("change", () => {
+            populateSubCategoryFilter(mainCategoryFilter.value);
+        });
+
+        document.getElementById("applyFilters").addEventListener("click", loadProducts);
+
+        grid.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-product-id]");
+            if (!button) return;
+
+            const card = button.closest(".card");
+            const sizeSelect = card?.querySelector(`select[data-size-select='${button.dataset.productId}']`);
+            const selectedSize = sizeSelect?.value;
+            const selectedOption = sizeSelect?.options?.[sizeSelect.selectedIndex];
+            if (!selectedSize || selectedOption?.disabled) {
+                showAlert("productsAlert", "Out of stock for selected size.", "warning");
+                return;
+            }
+
+            try {
+                await api.send("/api/cart/add", "POST", { productId: Number(button.dataset.productId), selectedSize, quantity: 1 });
+                showAlert("productsAlert", `Item (${selectedSize}) added to cart.`, "success");
+            } catch (e) {
+                showAlert("productsAlert", `${e.message}. Please login first.`, "warning");
+            }
+        });
+
+        await loadCategoryFilters();
+        await loadProducts();
+    }
+
+    function formToObject(form) {
+        return Object.fromEntries(new FormData(form).entries());
+    }
+
+    function normalizeAddressPayload(payload) {
+        return {
+            ...payload,
+            isDefaultShipping: payload.isDefaultShipping === "true" || payload.isDefaultShipping === "on"
+        };
+    }
+
+    function normalizeRegisterPayload(payload) {
+        return {
+            ...payload,
+            isDefaultShipping: payload.isDefaultShipping === "true" || payload.isDefaultShipping === "on"
+        };
+    }
+
+    async function loadAddressOptions(selectId) {
+        const select = document.getElementById(selectId);
+        if (!select) return [];
+
+        const addresses = await api.get("/api/addresses");
+        if (!addresses.length) {
+            select.innerHTML = `<option value="">No saved address. Add details below.</option>`;
+            return addresses;
+        }
+
+        select.innerHTML = `<option value="">Add new address</option>${addresses.map(a =>
+            `<option value="${a.id}">${a.recipientName} - ${a.line1}, ${a.city}${a.phoneNumber ? ` - ${a.phoneNumber}` : ""}${a.isDefaultShipping ? " (Default)" : ""}</option>`
+        ).join("")}`;
+
+        return addresses;
+    }
+
+    async function initAccountPage() {
+        const loginForm = document.getElementById("loginForm");
+        if (!loginForm) return;
+
+        const registerForm = document.getElementById("registerForm");
+        const addressForm = document.getElementById("addressForm");
+        const addressList = document.getElementById("addressList");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const userDetailsSection = document.getElementById("userDetailsSection");
+
+        const refreshUser = async () => {
+            try {
+                const me = await api.get("/api/auth/me");
+                showAlert("authStatus", `Logged in as ${me.fullName} (${me.email}) - ${me.role}`, "success");
+                loginForm.querySelector("button[type='submit']")?.setAttribute("disabled", "disabled");
+                const registerSubmit = registerForm?.querySelector("button[type='submit']");
+                registerSubmit?.setAttribute("disabled", "disabled");
+                userDetailsSection?.classList.remove("d-none");
+            } catch {
+                showAlert("authStatus", "Not logged in", "secondary");
+                loginForm.querySelector("button[type='submit']")?.removeAttribute("disabled");
+                const registerSubmit = registerForm?.querySelector("button[type='submit']");
+                registerSubmit?.removeAttribute("disabled");
+                userDetailsSection?.classList.add("d-none");
+            }
+        };
+
+        const loadAddresses = async () => {
+            if (!addressList) return;
+
+            try {
+                const addresses = await api.get("/api/addresses");
+                addressList.innerHTML = addresses.map(a =>
+                    `<li class="list-group-item">${a.recipientName}, ${a.line1}, ${a.city}, ${a.state}, ${a.postalCode}, ${a.country}${a.isDefaultShipping ? " <span class='badge text-bg-dark'>Default</span>" : ""}</li>`
+                ).join("");
+            } catch {
+                addressList.innerHTML = "<li class='list-group-item text-muted'>Login to manage addresses.</li>";
+            }
+        };
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(loginForm);
+            try {
+                await api.send("/api/auth/login", "POST", payload);
+                await refreshUser();
+                await loadAddresses();
+                showAlert("authStatus", "Login successful. You can place your order now.", "success");
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        if (registerForm) {
+            registerForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const payload = normalizeRegisterPayload(formToObject(registerForm));
+                try {
+                    await api.send("/api/auth/register", "POST", payload);
+                    await refreshUser();
+                    await loadAddresses();
+                    registerForm.reset();
+                    showAlert("authStatus", "Registration successful. Shipping details saved.", "success");
+                } catch (e) {
+                    showAlert("authStatus", e.message, "danger");
+                }
+            });
+        }
+
+        if (addressForm) {
+            addressForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const payload = normalizeAddressPayload(formToObject(addressForm));
+                try {
+                    await api.send("/api/addresses", "POST", payload);
+                    showAlert("authStatus", "Address saved.", "success");
+                    addressForm.reset();
+                    await loadAddresses();
+                } catch (e) {
+                    showAlert("authStatus", e.message, "danger");
+                }
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+                try {
+                    await api.send("/api/auth/logout", "POST");
+                    await refreshUser();
+                    await loadAddresses();
+                } catch (e) {
+                    showAlert("authStatus", e.message, "danger");
+                }
+            });
+        }
+
+        await refreshUser();
+        await loadAddresses();
+    }
+
+    async function initCartPage() {
+        const body = document.getElementById("cartItemsBody");
+        if (!body) return;
+
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        const applyCouponBtn = document.getElementById("applyCouponBtn");
+        const couponCode = document.getElementById("couponCode");
+        const cartSubtotal = document.getElementById("cartSubtotal");
+        const cartShipping = document.getElementById("cartShipping");
+        const checkoutAddress = document.getElementById("checkoutAddress");
+        const saveCheckoutAddressBtn = document.getElementById("saveCheckoutAddressBtn");
+        const checkoutRecipientName = document.getElementById("checkoutRecipientName");
+        const checkoutPhoneNumber = document.getElementById("checkoutPhoneNumber");
+        const checkoutLine1 = document.getElementById("checkoutLine1");
+        const checkoutLine2 = document.getElementById("checkoutLine2");
+        const checkoutCity = document.getElementById("checkoutCity");
+        const checkoutState = document.getElementById("checkoutState");
+        const checkoutPostalCode = document.getElementById("checkoutPostalCode");
+        const checkoutCountry = document.getElementById("checkoutCountry");
+        const checkoutDefaultShipping = document.getElementById("checkoutDefaultShipping");
+        let checkoutAddresses = [];
+        const shippingCharge = 10;
+
+        const setCheckoutAddressFields = (address) => {
+            checkoutRecipientName.value = address?.recipientName || "";
+            checkoutPhoneNumber.value = address?.phoneNumber || "";
+            checkoutLine1.value = address?.line1 || "";
+            checkoutLine2.value = address?.line2 || "";
+            checkoutCity.value = address?.city || "";
+            checkoutState.value = address?.state || "";
+            checkoutPostalCode.value = address?.postalCode || "";
+            checkoutCountry.value = address?.country || "";
+            checkoutDefaultShipping.checked = !!address?.isDefaultShipping;
+        };
+
+        const getCheckoutAddressPayload = () => ({
+            recipientName: checkoutRecipientName.value.trim(),
+            phoneNumber: checkoutPhoneNumber.value.trim(),
+            line1: checkoutLine1.value.trim(),
+            line2: checkoutLine2.value.trim(),
+            city: checkoutCity.value.trim(),
+            state: checkoutState.value.trim(),
+            postalCode: checkoutPostalCode.value.trim(),
+            country: checkoutCountry.value.trim(),
+            isDefaultShipping: checkoutDefaultShipping.checked
+        });
+
+        const getSelectedCheckoutAddress = () => {
+            const addressId = Number(checkoutAddress.value);
+            if (!addressId) return null;
+            return checkoutAddresses.find(x => x.id === addressId) || null;
+        };
+
+        const loadCart = async () => {
+            hideAlert("cartAlert");
+            try {
+                const cart = await api.get("/api/cart");
+                body.innerHTML = cart.items.map(i => `
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="${i.imageUrl}" alt="${i.productName}" style="width:56px;height:72px;object-fit:cover;" />
+                                <span>${i.productName}</span>
+                            </div>
+                        </td>
+                        <td>${i.selectedSize}</td>
+                        <td>${formatLkr(i.price)}</td>
+                        <td>
+                            <div class="input-group input-group-sm" style="max-width:120px;">
+                                <button class="btn btn-outline-secondary" type="button" data-dec-id="${i.id}">-</button>
+                                <input class="form-control text-center" type="number" min="1" value="${i.quantity}" data-item-id="${i.id}">
+                                <button class="btn btn-outline-secondary" type="button" data-inc-id="${i.id}">+</button>
+                            </div>
+                        </td>
+                        <td>${formatLkr(i.lineTotal)}</td>
+                        <td><button class="btn btn-sm btn-outline-danger" data-remove-id="${i.id}">×</button></td>
+                    </tr>`).join("");
+                const subtotalValue = Number(cart.total);
+                const shippingValue = cart.items.length ? shippingCharge : 0;
+                const totalValue = subtotalValue + shippingValue;
+
+                if (cartSubtotal) {
+                    cartSubtotal.textContent = subtotalValue.toFixed(2);
+                }
+
+                if (cartShipping) {
+                    cartShipping.textContent = shippingValue.toFixed(2);
+                }
+
+                document.getElementById("cartTotal").textContent = totalValue.toFixed(2);
+                checkoutAddresses = await loadAddressOptions("checkoutAddress");
+
+                if (checkoutAddresses.length) {
+                    const selectedAddressId = Number(checkoutAddress.value);
+                    let selectedAddress = checkoutAddresses.find(x => x.id === selectedAddressId) || null;
+                    if (!selectedAddress) {
+                        selectedAddress = checkoutAddresses.find(x => x.isDefaultShipping) || checkoutAddresses[0];
+                        checkoutAddress.value = String(selectedAddress.id);
+                    }
+
+                    setCheckoutAddressFields(selectedAddress);
+                } else {
+                    checkoutAddress.value = "";
+                    setCheckoutAddressFields(null);
+                }
+            } catch (e) {
+                body.innerHTML = "";
+                if (cartSubtotal) {
+                    cartSubtotal.textContent = "0.00";
+                }
+
+                if (cartShipping) {
+                    cartShipping.textContent = "0.00";
+                }
+
+                document.getElementById("cartTotal").textContent = "0.00";
+                if (checkoutAddress) {
+                    checkoutAddress.innerHTML = "";
+                }
+                setCheckoutAddressFields(null);
+                showAlert("cartAlert", `${e.message}. Please login to view your cart.`, "warning");
+            }
+        };
+
+        if (applyCouponBtn) {
+            applyCouponBtn.addEventListener("click", () => {
+                showAlert("cartAlert", `Coupon ${couponCode.value ? `\"${couponCode.value}\"` : "code"} is not available right now.`, "warning");
+            });
+        }
+
+        checkoutAddress.addEventListener("change", () => {
+            const selectedAddress = getSelectedCheckoutAddress();
+            setCheckoutAddressFields(selectedAddress);
+        });
+
+        saveCheckoutAddressBtn.addEventListener("click", async () => {
+            const payload = getCheckoutAddressPayload();
+
+            if (!payload.recipientName || !payload.phoneNumber || !payload.line1 || !payload.city || !payload.state || !payload.postalCode || !payload.country) {
+                showAlert("cartAlert", "Please fill recipient, mobile number, and address fields.", "warning");
+                return;
+            }
+
+            try {
+                const selectedAddress = getSelectedCheckoutAddress();
+                if (selectedAddress) {
+                    await api.send(`/api/addresses/${selectedAddress.id}`, "PUT", payload);
+                    showAlert("cartAlert", "Shipping address updated.", "success");
+                } else {
+                    await api.send("/api/addresses", "POST", payload);
+                    showAlert("cartAlert", "Shipping address added.", "success");
+                }
+
+                await loadCart();
+            } catch (e) {
+                if ((e.message || "").toLowerCase().includes("unauthorized")) {
+                    showAlert("cartAlert", "Please login from Account page to save address.", "warning");
+                } else {
+                    showAlert("cartAlert", e.message, "danger");
+                }
+            }
+        });
+
+        body.addEventListener("change", async (event) => {
+            const input = event.target.closest("input[data-item-id]");
+            if (!input) return;
+
+            await api.send(`/api/cart/item/${input.dataset.itemId}`, "PUT", { quantity: Number(input.value) });
+            await loadCart();
+        });
+
+        body.addEventListener("click", async (event) => {
+            const decreaseButton = event.target.closest("button[data-dec-id]");
+            if (decreaseButton) {
+                const input = body.querySelector(`input[data-item-id='${decreaseButton.dataset.decId}']`);
+                if (input) {
+                    const nextValue = Math.max(1, Number(input.value) - 1);
+                    await api.send(`/api/cart/item/${decreaseButton.dataset.decId}`, "PUT", { quantity: nextValue });
+                    await loadCart();
+                }
+                return;
+            }
+
+            const increaseButton = event.target.closest("button[data-inc-id]");
+            if (increaseButton) {
+                const input = body.querySelector(`input[data-item-id='${increaseButton.dataset.incId}']`);
+                if (input) {
+                    const nextValue = Number(input.value) + 1;
+                    await api.send(`/api/cart/item/${increaseButton.dataset.incId}`, "PUT", { quantity: nextValue });
+                    await loadCart();
+                }
+                return;
+            }
+
+            const button = event.target.closest("button[data-remove-id]");
+            if (!button) return;
+
+            await api.send(`/api/cart/item/${button.dataset.removeId}`, "DELETE");
+            await loadCart();
+        });
+
+        checkoutBtn.addEventListener("click", async () => {
+            try {
+                const userAddressId = Number(checkoutAddress.value);
+                if (!userAddressId) {
+                    showAlert("cartAlert", "Please select a saved shipping address.", "warning");
+                    return;
+                }
+
+                await api.send("/api/orders/checkout", "POST", { userAddressId });
+                showAlert("cartAlert", "Order placed successfully.", "success");
+                await loadCart();
+            } catch (e) {
+                if ((e.message || "").toLowerCase().includes("unauthorized")) {
+                    showAlert("cartAlert", "Please login from Account page before placing order.", "warning");
+                } else {
+                    showAlert("cartAlert", e.message, "danger");
+                }
+            }
+        });
+
+        await loadCart();
+    }
+
+    async function initOrdersPage() {
+        const container = document.getElementById("ordersContainer");
+        if (!container) return;
+
+        try {
+            const orders = await api.get("/api/orders/mine");
+            if (!orders.length) {
+                container.innerHTML = "<div class='text-muted'>No orders yet.</div>";
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Order #${order.id}</strong>
+                            <span class="badge text-bg-secondary">${order.status}</span>
+                        </div>
+                        <div class="small text-muted mb-2">${new Date(order.createdAtUtc).toLocaleString()}</div>
+                        <div class="mb-2">Ship to: ${order.shippingAddress.recipientName}, ${order.shippingAddress.line1}, ${order.shippingAddress.city}</div>
+                        <ul class="mb-2">${order.items.map(i => `<li>${i.productNameSnapshot} (${i.selectedSizeSnapshot}) x ${i.quantity} - ${formatLkr(i.lineTotal)}</li>`).join("")}</ul>
+                        <strong>Total: ${formatLkr(order.totalAmount)}</strong>
+                    </div>
+                </div>
+            `).join("");
+        } catch (e) {
+            showAlert("ordersAlert", `${e.message}. Please login to view orders.`, "warning");
+        }
+    }
+
+    async function initAdminPage() {
+        const overview = document.getElementById("adminOverview");
+        if (!overview) return;
+
+        const productForm = document.getElementById("adminProductForm");
+        const productsBody = document.getElementById("adminProductsBody");
+        const productSearch = document.getElementById("adminProductSearch");
+        const mainCategoryFilter = document.getElementById("adminMainCategoryFilter");
+        const subCategoryFilter = document.getElementById("adminSubCategoryFilter");
+        const lastWeekOnly = document.getElementById("adminLastWeekOnly");
+        const applyProductFilters = document.getElementById("adminApplyProductFilters");
+        const productMainCategorySelect = document.getElementById("adminProductMainCategoryId");
+        const productCategorySelect = document.getElementById("adminProductCategoryId");
+        const productFormTitle = document.getElementById("adminProductFormTitle");
+        const productSubmitButton = document.getElementById("adminProductSubmit");
+        const cancelEditButton = document.getElementById("adminProductCancelEdit");
+        const imageFileInput = document.getElementById("adminProductImageFile");
+        const sizeEnabledInputs = Array.from(productForm.querySelectorAll(".admin-size-enabled"));
+        const sizeQtyInputs = Array.from(productForm.querySelectorAll(".admin-size-qty"));
+        const ordersBody = document.getElementById("adminOrdersBody");
+        const cartBody = document.getElementById("adminCartBody");
+
+        let categories = [];
+
+        const loadOverview = async () => {
+            const stats = await api.get("/api/admin/overview");
+            overview.innerHTML = [
+                ["Users", stats.userCount],
+                ["Products", stats.productCount],
+                ["Orders", stats.orderCount],
+                ["Pending", stats.pendingOrderCount],
+                ["Cart Items", stats.cartItemCount]
+            ].map(s => `
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="card text-center h-100">
+                        <div class="card-body"><div class="small text-muted">${s[0]}</div><div class="fs-4 fw-semibold">${s[1]}</div></div>
+                    </div>
+                </div>`).join("");
+        };
+
+        const toDateTimeLocal = value => {
+            if (!value) return "";
+            const date = new Date(value);
+            const offset = date.getTimezoneOffset();
+            const local = new Date(date.getTime() - offset * 60000);
+            return local.toISOString().slice(0, 16);
+        };
+
+        const resetProductForm = () => {
+            productForm.reset();
+            productForm.elements.id.value = "";
+            productFormTitle.textContent = "Add Product";
+            productSubmitButton.textContent = "Create Product";
+            sizeQtyInputs.forEach(x => {
+                x.disabled = true;
+                x.value = "";
+            });
+            if (productMainCategorySelect.value) {
+                populateProductSubCategories(productMainCategorySelect.value);
+            }
+        };
+
+        const collectSizeStocks = () => {
+            return sizeEnabledInputs
+                .filter(x => x.checked)
+                .map(x => {
+                    const qtyInput = productForm.querySelector(`.admin-size-qty[data-size='${x.value}']`);
+                    return {
+                        size: x.value,
+                        quantity: Number(qtyInput?.value || 0)
+                    };
+                })
+                .filter(x => x.quantity > 0);
+        };
+
+        const applySizeStocksToForm = (sizeStocks = []) => {
+            sizeEnabledInputs.forEach(x => {
+                x.checked = false;
+                const qtyInput = productForm.querySelector(`.admin-size-qty[data-size='${x.value}']`);
+                if (qtyInput) {
+                    qtyInput.disabled = true;
+                    qtyInput.value = "";
+                }
+            });
+
+            sizeStocks.forEach(stock => {
+                const enabled = sizeEnabledInputs.find(x => x.value === stock.size);
+                const qtyInput = productForm.querySelector(`.admin-size-qty[data-size='${stock.size}']`);
+                if (enabled && qtyInput) {
+                    enabled.checked = true;
+                    qtyInput.disabled = false;
+                    qtyInput.value = stock.quantity;
+                }
+            });
+        };
+
+        const uploadImageIfSelected = async () => {
+            const file = imageFileInput?.files?.[0];
+            if (!file) {
+                return productForm.elements.imageUrl.value;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/api/admin/products/upload-image", {
+                method: "POST",
+                credentials: "include",
+                body: formData
+            });
+
+            const text = await response.text();
+            const data = text ? JSON.parse(text) : null;
+            if (!response.ok) {
+                throw new Error(data?.message || "Image upload failed");
+            }
+
+            productForm.elements.imageUrl.value = data.imageUrl;
+            return data.imageUrl;
+        };
+
+        const loadCategories = async () => {
+            categories = await api.get("/api/admin/categories");
+
+            mainCategoryFilter.innerHTML = `<option value="">All main categories</option>${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("")}`;
+            productMainCategorySelect.innerHTML = `<option value="">Select main category</option>${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("")}`;
+            subCategoryFilter.innerHTML = `<option value="">All subcategories</option>`;
+            productCategorySelect.innerHTML = `<option value="">Select subcategory</option>`;
+        };
+
+        const populateSubCategoriesFilter = (mainCategoryId) => {
+            const main = categories.find(x => String(x.id) === String(mainCategoryId));
+            const subs = main?.subCategories ?? [];
+            subCategoryFilter.innerHTML = `<option value="">All subcategories</option>${subs.map(c => `<option value="${c.id}">${c.name}</option>`).join("")}`;
+        };
+
+        const populateProductSubCategories = (mainCategoryId) => {
+            const main = categories.find(x => String(x.id) === String(mainCategoryId));
+            const subs = main?.subCategories ?? [];
+            productCategorySelect.innerHTML = `<option value="">Select subcategory</option>${subs.map(c => `<option value="${c.id}">${c.name}</option>`).join("")}`;
+        };
+
+        const loadProducts = async () => {
+            const query = new URLSearchParams();
+            if (productSearch.value.trim()) query.set("search", productSearch.value.trim());
+            if (mainCategoryFilter.value) query.set("mainCategoryId", mainCategoryFilter.value);
+            if (subCategoryFilter.value) query.set("categoryId", subCategoryFilter.value);
+            if (lastWeekOnly.checked) query.set("lastWeekOnly", "true");
+
+            const products = await api.get(`/api/admin/products?${query.toString()}`);
+            productsBody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>${p.gender}</td>
+                    <td>${formatLkr(p.price)}</td>
+                    <td>${p.totalStock}</td>
+                    <td>${new Date(p.dateAdded).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" data-edit-product="${p.id}">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" data-delete-product="${p.id}">Delete</button>
+                    </td>
+                </tr>
+            `).join("");
+        };
+
+        const loadOrders = async () => {
+            const orders = await api.get("/api/admin/orders");
+            ordersBody.innerHTML = orders.map(o => `
+                <tr>
+                    <td>${o.id}</td>
+                    <td>${o.customer}</td>
+                    <td>
+                        <select class="form-select form-select-sm" data-order-id="${o.id}">
+                            ${["Pending", "Processing", "Shipped", "Delivered", "Cancelled"].map(s => `<option value="${s}" ${o.status === s ? "selected" : ""}>${s}</option>`).join("")}
+                        </select>
+                    </td>
+                    <td>${formatLkr(o.totalAmount)}</td>
+                    <td>${new Date(o.createdAtUtc).toLocaleDateString()}</td>
+                    <td><button class="btn btn-sm btn-outline-dark" data-save-order="${o.id}">Save</button></td>
+                </tr>`).join("");
+        };
+
+        const loadCartItems = async () => {
+            const items = await api.get("/api/admin/cart-items");
+            cartBody.innerHTML = items.map(i => `
+                <tr>
+                    <td>${i.customerName}</td>
+                    <td>${i.productName}</td>
+                    <td>${i.quantity}</td>
+                    <td>${formatLkr(i.lineTotal)}</td>
+                </tr>`).join("");
+        };
+
+        applyProductFilters.addEventListener("click", async () => {
+            try {
+                await loadProducts();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        mainCategoryFilter.addEventListener("change", () => {
+            populateSubCategoriesFilter(mainCategoryFilter.value);
+        });
+
+        productMainCategorySelect.addEventListener("change", () => {
+            populateProductSubCategories(productMainCategorySelect.value);
+        });
+
+        cancelEditButton.addEventListener("click", () => resetProductForm());
+
+        sizeEnabledInputs.forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+                const qtyInput = productForm.querySelector(`.admin-size-qty[data-size='${checkbox.value}']`);
+                if (!qtyInput) return;
+                qtyInput.disabled = !checkbox.checked;
+                if (!checkbox.checked) qtyInput.value = "";
+            });
+        });
+
+        productsBody.addEventListener("click", async (event) => {
+            const editButton = event.target.closest("button[data-edit-product]");
+            if (editButton) {
+                try {
+                    const product = await api.get(`/api/admin/products/${editButton.dataset.editProduct}`);
+                    productForm.elements.id.value = editButton.dataset.editProduct;
+                    productForm.elements.name.value = product.name;
+                    productForm.elements.description.value = product.description;
+                    productForm.elements.mainCategoryId.value = String(product.mainCategoryId || "");
+                    populateProductSubCategories(product.mainCategoryId);
+                    productForm.elements.categoryId.value = String(product.categoryId);
+                    productForm.elements.gender.value = product.gender;
+                    productForm.elements.color.value = product.color;
+                    productForm.elements.price.value = product.price;
+                    productForm.elements.imageUrl.value = product.imageUrl;
+                    applySizeStocksToForm(product.sizeStocks || []);
+                    productForm.elements.dateAdded.value = toDateTimeLocal(product.dateAdded);
+                    productFormTitle.textContent = `Edit Product #${editButton.dataset.editProduct}`;
+                    productSubmitButton.textContent = "Update Product";
+                    window.scrollTo({ top: productForm.offsetTop - 100, behavior: "smooth" });
+                } catch (e) {
+                    showAlert("adminAlert", e.message, "danger");
+                }
+                return;
+            }
+
+            const deleteButton = event.target.closest("button[data-delete-product]");
+            if (!deleteButton) return;
+
+            if (!confirm("Delete this product?")) return;
+
+            try {
+                await api.send(`/api/admin/products/${deleteButton.dataset.deleteProduct}`, "DELETE");
+                showAlert("adminAlert", "Product deleted.", "success");
+                await loadProducts();
+                await loadOverview();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        productForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(productForm);
+            const productId = payload.id;
+            delete payload.id;
+            payload.categoryId = Number(payload.categoryId);
+            payload.mainCategoryId = payload.mainCategoryId ? Number(payload.mainCategoryId) : null;
+            payload.price = Number(payload.price);
+            payload.dateAdded = payload.dateAdded ? new Date(payload.dateAdded).toISOString() : null;
+            payload.sizeStocks = collectSizeStocks();
+
+            if (!payload.categoryId) {
+                showAlert("adminAlert", "Please select a subcategory.", "warning");
+                return;
+            }
+
+            if (!payload.sizeStocks.length) {
+                showAlert("adminAlert", "Please select at least one size and quantity.", "warning");
+                return;
+            }
+
+            try {
+                payload.imageUrl = await uploadImageIfSelected();
+                if (productId) {
+                    await api.send(`/api/admin/products/${productId}`, "PUT", payload);
+                    showAlert("adminAlert", "Product updated.", "success");
+                } else {
+                    await api.send("/api/admin/products", "POST", payload);
+                    showAlert("adminAlert", "Product created.", "success");
+                }
+                resetProductForm();
+                await loadProducts();
+                await loadOverview();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        ordersBody.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-save-order]");
+            if (!button) return;
+
+            const orderId = button.dataset.saveOrder;
+            const select = ordersBody.querySelector(`select[data-order-id='${orderId}']`);
+
+            try {
+                await api.send(`/api/admin/orders/${orderId}/status`, "PUT", { status: select.value });
+                showAlert("adminAlert", "Order status updated.", "success");
+                await loadOrders();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        try {
+            await loadCategories();
+            resetProductForm();
+            await loadProducts();
+            await loadOverview();
+            await loadOrders();
+            await loadCartItems();
+        } catch (e) {
+            showAlert("adminAlert", `${e.message}. Login as admin to access this page.`, "warning");
+        }
+    }
+
+    return {
+        initProductsPage,
+        initCartPage,
+        initAccountPage,
+        initOrdersPage,
+        initAdminPage
+    };
+})();

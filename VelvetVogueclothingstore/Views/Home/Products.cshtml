@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+    <h2 class="mb-0">Products</h2>
+    <div class="d-flex gap-2 w-100 w-md-auto">
+        <select id="mainCategoryFilter" class="form-select">
+            <option value="">All main categories</option>
+        </select>
+        <select id="subCategoryFilter" class="form-select">
+            <option value="">All subcategories</option>
+        </select>
+        <input id="genderFilter" class="form-control" placeholder="Gender" />
+        <button id="applyFilters" class="btn btn-outline-dark">Filter</button>
+    </div>
+</div>
+
+<div id="productsAlert" class="alert alert-info d-none"></div>
+<div id="productsGrid" class="row g-3"></div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initProductsPage();
+    </script>
+}

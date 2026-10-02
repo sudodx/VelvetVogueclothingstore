@@ -1,0 +1,151 @@
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class CartController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet]
+    public async Task<IActionResult> GetCart()
+    {
+        var userId = GetUserId();
+
+        var items = await db.CartItems
+            .Where(x => x.UserAccountId == userId)
+            .Include(x => x.Product)
+            .Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                ProductName = x.Product!.Name,
+                x.SelectedSize,
+                Price = x.Product.Price,
+                x.Quantity,
+                LineTotal = x.Quantity * x.Product.Price
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            items,
+            total = items.Sum(x => x.LineTotal)
+        });
+    }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddToCart(AddToCartRequest request)
+    {
+        var userId = GetUserId();
+
+        if (string.IsNullOrWhiteSpace(request.SelectedSize))
+        {
+            return BadRequest(new { message = "Please select a size." });
+        }
+
+        var selectedSize = request.SelectedSize.Trim();
+        var product = await db.Products
+            .Include(x => x.SizeStocks)
+            .SingleOrDefaultAsync(x => x.Id == request.ProductId);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        var sizeStock = product.SizeStocks.SingleOrDefault(x => x.Size == selectedSize);
+        if (sizeStock is null || sizeStock.Quantity <= 0)
+        {
+            return BadRequest(new { message = $"Size '{selectedSize}' is not available." });
+        }
+
+        var existingItem = await db.CartItems.SingleOrDefaultAsync(x =>
+            x.UserAccountId == userId
+            && x.ProductId == request.ProductId
+            && x.SelectedSize == selectedSize);
+
+        var requestedQuantity = Math.Max(1, request.Quantity);
+        var totalQuantity = (existingItem?.Quantity ?? 0) + requestedQuantity;
+        if (totalQuantity > sizeStock.Quantity)
+        {
+            return BadRequest(new { message = $"Only {sizeStock.Quantity} item(s) available for size '{selectedSize}'." });
+        }
+
+        if (existingItem is null)
+        {
+            db.CartItems.Add(new CartItem
+            {
+                UserAccountId = userId,
+                ProductId = request.ProductId,
+                SelectedSize = selectedSize,
+                Quantity = requestedQuantity
+            });
+        }
+        else
+        {
+            existingItem.Quantity = totalQuantity;
+        }
+
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Added to cart" });
+    }
+
+    [HttpPut("item/{itemId:int}")]
+    public async Task<IActionResult> UpdateQuantity(int itemId, UpdateCartItemRequest request)
+    {
+        var userId = GetUserId();
+        var item = await db.CartItems
+            .Include(x => x.Product)
+            .ThenInclude(x => x!.SizeStocks)
+            .SingleOrDefaultAsync(x => x.Id == itemId && x.UserAccountId == userId);
+        if (item is null)
+        {
+            return NotFound(new { message = "Cart item not found." });
+        }
+
+        var quantity = request.Quantity;
+        var available = item.Product?.SizeStocks.SingleOrDefault(x => x.Size == item.SelectedSize)?.Quantity ?? 0;
+        if (quantity > available)
+        {
+            return BadRequest(new { message = $"Only {available} item(s) available for size '{item.SelectedSize}'." });
+        }
+
+        item.Quantity = quantity;
+        if (item.Quantity <= 0)
+        {
+            db.CartItems.Remove(item);
+        }
+
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Cart updated" });
+    }
+
+    [HttpDelete("item/{itemId:int}")]
+    public async Task<IActionResult> RemoveItem(int itemId)
+    {
+        var userId = GetUserId();
+        var item = await db.CartItems.SingleOrDefaultAsync(x => x.Id == itemId && x.UserAccountId == userId);
+        if (item is null)
+        {
+            return NotFound(new { message = "Cart item not found." });
+        }
+
+        db.CartItems.Remove(item);
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Removed" });
+    }
+
+    private int GetUserId()
+    {
+        var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.Parse(userIdValue!);
+    }
+
+    public record AddToCartRequest(int ProductId, string SelectedSize, int Quantity = 1);
+    public record UpdateCartItemRequest(int Quantity);
+}

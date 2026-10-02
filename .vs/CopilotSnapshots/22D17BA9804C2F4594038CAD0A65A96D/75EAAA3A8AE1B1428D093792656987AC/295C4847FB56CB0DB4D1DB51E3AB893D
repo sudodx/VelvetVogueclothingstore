@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Cart";
+}
+
+<h2 class="mb-3">Your Cart</h2>
+<div id="cartAlert" class="alert alert-info d-none"></div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="cartItemsBody"></tbody>
+    </table>
+</div>
+<div class="text-end fs-5 fw-semibold">Grand Total: $<span id="cartTotal">0.00</span></div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Checkout</h5>
+        <div class="row g-2 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Recipient Name</label>
+                <input id="checkoutRecipientName" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input id="checkoutPhoneNumber" class="form-control" />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 1</label>
+                <input id="checkoutLine1" class="form-control" />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 2</label>
+                <input id="checkoutLine2" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input id="checkoutCity" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input id="checkoutState" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Postal Code</label>
+                <input id="checkoutPostalCode" class="form-control" />
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Country</label>
+                <input id="checkoutCountry" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="checkoutDefaultShipping" />
+                    <label class="form-check-label" for="checkoutDefaultShipping">Set as default</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-8">
+                <label class="form-label">Shipping Address</label>
+                <select id="checkoutAddress" class="form-select"></select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button id="saveCheckoutAddressBtn" class="btn btn-outline-dark" type="button">Save</button>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button id="checkoutBtn" class="btn btn-dark">Place Order</button>
+            </div>
+        </div>
+        <small class="text-muted d-block mt-2">Select an address to edit it or fill fields and click Save to add a new one.</small>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initCartPage();
+    </script>
+}

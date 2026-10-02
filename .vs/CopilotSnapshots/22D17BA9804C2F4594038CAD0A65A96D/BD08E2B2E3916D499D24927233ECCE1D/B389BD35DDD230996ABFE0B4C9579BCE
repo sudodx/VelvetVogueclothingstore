@@ -1,0 +1,129 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? gender, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice)
+    {
+        var query = db.Products.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            query = query.Where(x => x.Category == category);
+        }
+
+        if (!string.IsNullOrWhiteSpace(gender))
+        {
+            query = query.Where(x => x.Gender == gender);
+        }
+
+        if (minPrice.HasValue)
+        {
+            query = query.Where(x => x.Price >= minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(x => x.Price <= maxPrice.Value);
+        }
+
+        var products = await query
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        return Ok(product);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Create(CreateProductRequest request)
+    {
+        var product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Category = request.Category,
+            Gender = request.Gender,
+            Size = request.Size,
+            Color = request.Color,
+            Price = request.Price,
+            ImageUrl = request.ImageUrl,
+            Stock = request.Stock
+        };
+
+        db.Products.Add(product);
+        await db.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetAll), new { id = product.Id }, product);
+    }
+
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Update(int id, CreateProductRequest request)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        product.Name = request.Name;
+        product.Description = request.Description;
+        product.Category = request.Category;
+        product.Gender = request.Gender;
+        product.Size = request.Size;
+        product.Color = request.Color;
+        product.Price = request.Price;
+        product.ImageUrl = request.ImageUrl;
+        product.Stock = request.Stock;
+
+        await db.SaveChangesAsync();
+        return Ok(product);
+    }
+
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        db.Products.Remove(product);
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Product deleted." });
+    }
+
+    public record CreateProductRequest(
+        string Name,
+        string Description,
+        string Category,
+        string Gender,
+        string Size,
+        string Color,
+        decimal Price,
+        string ImageUrl,
+        int Stock);
+}

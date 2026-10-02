@@ -1,0 +1,617 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\useraddress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\useraddress.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\useraccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\useraccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\data\\seeddata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\cartitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\orderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\productsizestock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\productsizestock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\orderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\wwwroot\\js\\store.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\wwwroot\\js\\store.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\account.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\account.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\adminproductviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\adminproductviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\homeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\admin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\admin\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\cart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\cart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|c:\\users\\a-ssebastiampillai\\source\\repos\\velvetvogueclothingstore\\velvetvogueclothingstore\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{95F54FDF-AB37-F9BC-D4E9-6FBD08FD6D09}|VelvetVogueclothingstore\\VelvetVogueclothingstore.csproj|solutionrelative:velvetvogueclothingstore\\models\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 378,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAADQAAAAAAAAAAAAvwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T16:44:23.03Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserAccount.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\UserAccount.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\UserAccount.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\UserAccount.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\UserAccount.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T18:06:44.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserAddress.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\UserAddress.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\UserAddress.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\UserAddress.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\UserAddress.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T18:06:39.033Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:142:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:264826211:0:{83107a3e-496a-485e-b455-16ddb978e55e}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2061353532:0:{83107a3e-496a-485e-b455-16ddb978e55e}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:509685458:0:{81164725-9a96-4ece-a4cb-440d8fd285e5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:509685457:0:{81164725-9a96-4ece-a4cb-440d8fd285e5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2010337592:0:{81164725-9a96-4ece-a4cb-440d8fd285e5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136197859:0:{81164725-9a96-4ece-a4cb-440d8fd285e5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\README.md",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\README.md",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\README.md",
+              "RelativeToolTip": "VelvetVogueclothingstore\\README.md",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAAAIQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-10-02T18:02:36.152Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\Category.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\Category.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\Category.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\Category.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T18:01:58.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\Order.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\Order.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\Order.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\Order.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAIBWwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T17:59:43.857Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Cart.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Cart.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Cart.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Cart.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Cart.cshtml",
+              "ViewState": "AgIAAGsAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T17:48:03.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SeedData.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Data\\SeedData.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Data\\SeedData.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Data\\SeedData.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Data\\SeedData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:47:58.819Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "OrderItem.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\OrderItem.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\OrderItem.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\OrderItem.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\OrderItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:39:21.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CartItem.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\CartItem.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\CartItem.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\CartItem.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\CartItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:39:12.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:49:38.717Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\ProductsController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAnwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:50:51.149Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "OrdersController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\OrdersController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\OrdersController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\OrdersController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\OrdersController.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:39:59.207Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Admin\\Login.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Admin\\Login.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Admin\\Login.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Admin\\Login.cshtml",
+              "ViewState": "AgIAADIAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T17:45:53.529Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Login.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Login.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Login.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T17:54:23.818Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CartController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\CartController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\CartController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\CartController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\CartController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:39:47.468Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T17:29:09.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:40:10.421Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "store.js",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\wwwroot\\js\\store.js",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\wwwroot\\js\\store.js",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\wwwroot\\js\\store.js",
+              "RelativeToolTip": "VelvetVogueclothingstore\\wwwroot\\js\\store.js",
+              "ViewState": "AgIAACsCAAAAAAAAAAAcwGoBAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-10-02T16:40:36.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Account.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Account.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Account.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Account.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Account.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T17:21:32.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Contact.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Contact.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Contact.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Contact.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Contact.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T17:16:29.462Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AdminProductViewModels.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\AdminProductViewModels.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\AdminProductViewModels.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\AdminProductViewModels.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\AdminProductViewModels.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:48:19.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Products.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Products.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Products.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Products.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Products.cshtml",
+              "ViewState": "AgIAAAsAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T16:51:02.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAA4AAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T16:49:02.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAIA3wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:39:31.376Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "HomeViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\HomeViewModel.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\HomeViewModel.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\HomeViewModel.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\HomeViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T16:44:19.518Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Home.cshtml",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Home.cshtml",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Views\\Home\\Home.cshtml",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Views\\Home\\Home.cshtml",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Views\\Home\\Home.cshtml",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAlwJgAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-02T15:02:25.905Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 199,
+          "SelectedChildIndex": 9,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:141:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:143:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ProductSizeStock.cs",
+              "DocumentMoniker": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\ProductSizeStock.cs",
+              "RelativeDocumentMoniker": "VelvetVogueclothingstore\\Models\\ProductSizeStock.cs",
+              "ToolTip": "C:\\Users\\a-ssebastiampillai\\source\\repos\\VelvetVogueclothingstore\\VelvetVogueclothingstore\\Models\\ProductSizeStock.cs",
+              "RelativeToolTip": "VelvetVogueclothingstore\\Models\\ProductSizeStock.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-02T18:01:40.132Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 153,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b38c6cbc-524d-4f30-8a18-936e3104b734}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

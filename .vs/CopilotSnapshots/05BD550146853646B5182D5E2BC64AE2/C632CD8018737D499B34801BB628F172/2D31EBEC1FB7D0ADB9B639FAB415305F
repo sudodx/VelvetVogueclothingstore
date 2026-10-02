@@ -1,0 +1,186 @@
+﻿window.StoreApp = (() => {
+    const api = {
+        async get(url) {
+            const response = await fetch(url, { credentials: "include" });
+            return parseResponse(response);
+        },
+        async send(url, method, body) {
+            const response = await fetch(url, {
+                method,
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: body ? JSON.stringify(body) : null
+            });
+            return parseResponse(response);
+        }
+    };
+
+    async function parseResponse(response) {
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!response.ok) {
+            throw new Error(data?.message || "Request failed");
+        }
+
+        return data;
+    }
+
+    function showAlert(id, message, type = "info") {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.className = `alert alert-${type}`;
+        el.textContent = message;
+        el.classList.remove("d-none");
+    }
+
+    function hideAlert(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add("d-none");
+    }
+
+    async function initProductsPage() {
+        const grid = document.getElementById("productsGrid");
+        if (!grid) return;
+
+        const loadProducts = async () => {
+            hideAlert("productsAlert");
+            const category = document.getElementById("categoryFilter").value;
+            const gender = document.getElementById("genderFilter").value;
+            const query = new URLSearchParams();
+
+            if (category) query.set("category", category);
+            if (gender) query.set("gender", gender);
+
+            try {
+                const products = await api.get(`/api/products?${query.toString()}`);
+                grid.innerHTML = products.map(p => `
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card h-100">
+                            <img src="${p.imageUrl}" class="card-img-top" alt="${p.name}" style="height:220px;object-fit:cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${p.name}</h5>
+                                <p class="card-text small text-muted">${p.category} • ${p.gender} • ${p.size}</p>
+                                <p class="card-text">${p.description}</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <strong>$${Number(p.price).toFixed(2)}</strong>
+                                    <button class="btn btn-sm btn-dark" data-product-id="${p.id}">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`).join("");
+            } catch (e) {
+                showAlert("productsAlert", e.message, "danger");
+            }
+        };
+
+        document.getElementById("applyFilters").addEventListener("click", loadProducts);
+
+        grid.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-product-id]");
+            if (!button) return;
+
+            try {
+                await api.send("/api/cart/add", "POST", { productId: Number(button.dataset.productId), quantity: 1 });
+                showAlert("productsAlert", "Item added to cart.", "success");
+            } catch (e) {
+                showAlert("productsAlert", `${e.message}. Please login first.`, "warning");
+            }
+        });
+
+        await loadProducts();
+    }
+
+    async function initCartPage() {
+        const body = document.getElementById("cartItemsBody");
+        if (!body) return;
+
+        const loadCart = async () => {
+            hideAlert("cartAlert");
+            try {
+                const cart = await api.get("/api/cart");
+                body.innerHTML = cart.items.map(i => `
+                    <tr>
+                        <td>${i.productName}</td>
+                        <td>$${Number(i.price).toFixed(2)}</td>
+                        <td><input class="form-control form-control-sm" type="number" min="1" value="${i.quantity}" data-item-id="${i.id}" style="max-width:90px"></td>
+                        <td>$${Number(i.lineTotal).toFixed(2)}</td>
+                        <td><button class="btn btn-sm btn-outline-danger" data-remove-id="${i.id}">Remove</button></td>
+                    </tr>`).join("");
+                document.getElementById("cartTotal").textContent = Number(cart.total).toFixed(2);
+            } catch (e) {
+                body.innerHTML = "";
+                document.getElementById("cartTotal").textContent = "0.00";
+                showAlert("cartAlert", `${e.message}. Please login to view your cart.`, "warning");
+            }
+        };
+
+        body.addEventListener("change", async (event) => {
+            const input = event.target.closest("input[data-item-id]");
+            if (!input) return;
+
+            await api.send(`/api/cart/item/${input.dataset.itemId}`, "PUT", { quantity: Number(input.value) });
+            await loadCart();
+        });
+
+        body.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-remove-id]");
+            if (!button) return;
+
+            await api.send(`/api/cart/item/${button.dataset.removeId}`, "DELETE");
+            await loadCart();
+        });
+
+        await loadCart();
+    }
+
+    function formToObject(form) {
+        return Object.fromEntries(new FormData(form).entries());
+    }
+
+    async function initAccountPage() {
+        const loginForm = document.getElementById("loginForm");
+        if (!loginForm) return;
+
+        const registerForm = document.getElementById("registerForm");
+
+        const refreshUser = async () => {
+            try {
+                const me = await api.get("/api/auth/me");
+                showAlert("authStatus", `Logged in as ${me.fullName} (${me.email})`, "success");
+            } catch {
+                showAlert("authStatus", "Not logged in", "secondary");
+            }
+        };
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(loginForm);
+            try {
+                await api.send("/api/auth/login", "POST", payload);
+                await refreshUser();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(registerForm);
+            try {
+                await api.send("/api/auth/register", "POST", payload);
+                await refreshUser();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        await refreshUser();
+    }
+
+    return {
+        initProductsPage,
+        initCartPage,
+        initAccountPage
+    };
+})();

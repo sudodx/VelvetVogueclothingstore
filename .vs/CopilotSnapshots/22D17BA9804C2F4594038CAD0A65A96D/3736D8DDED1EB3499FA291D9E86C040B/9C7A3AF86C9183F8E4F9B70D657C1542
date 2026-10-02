@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="py-4 text-center">
+    <h1 class="display-5 fw-bold mb-2">Velvet Vogue logo</h1>
+    <p class="text-muted">Signature fashion for modern wardrobes.</p>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Navigation menu</h2>
+    <ul class="nav nav-pills gap-2 flex-wrap">
+        <li class="nav-item"><span class="nav-link active">Home</span></li>
+        <li class="nav-item"><span class="nav-link">Men</span></li>
+        <li class="nav-item"><span class="nav-link">Women</span></li>
+        <li class="nav-item"><span class="nav-link">New Arrivals</span></li>
+        <li class="nav-item"><span class="nav-link">Cart</span></li>
+        <li class="nav-item"><span class="nav-link">Contact</span></li>
+        <li class="nav-item"><span class="nav-link">Login</span></li>
+    </ul>
+</section>
+
+<section class="py-5 text-center bg-light rounded-3 mb-4">
+    <h2 class="h4 mb-3">Hero banner</h2>
+    <p class="display-6 fw-semibold mb-0">"Discover Your Style with Velvet Vogue"</p>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Featured Products</h2>
+    <div class="row g-3">
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">Classic Tailored Blazer</div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">Luxury Knit Dress</div></div></div>
+        <div class="col-md-4"><div class="card h-100"><div class="card-body">Premium Linen Shirt</div></div></div>
+    </div>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">New Arrivals</h2>
+    <p>Explore the latest additions curated for this season.</p>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Seasonal Promotions</h2>
+    <p>Enjoy limited-time discounts on selected collections.</p>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Customer Reviews</h2>
+    <blockquote class="blockquote mb-2">
+        <p>"Great quality and fast delivery. My new favorite store."</p>
+    </blockquote>
+    <footer class="blockquote-footer">Verified customer</footer>
+</section>
+
+<section class="mb-4">
+    <h2 class="h4 mb-3">Newsletter Subscription</h2>
+    <form class="row g-2">
+        <div class="col-sm-8 col-md-6">
+            <input type="email" class="form-control" placeholder="Enter your email" />
+        </div>
+        <div class="col-sm-4 col-md-3">
+            <button type="button" class="btn btn-dark w-100">Subscribe</button>
+        </div>
+    </form>
+</section>
+
+<section class="pt-3 border-top">
+    <h2 class="h6 text-uppercase text-muted">Footer</h2>
+    <p class="mb-0">© Velvet Vogue. All rights reserved.</p>
+</section>

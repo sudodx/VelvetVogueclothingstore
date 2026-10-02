@@ -1,0 +1,67 @@
+﻿using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Data;
+
+public static class SeedData
+{
+    public static void Initialize(ApplicationDbContext db)
+    {
+        if (db.Products.Any())
+        {
+            return;
+        }
+
+        db.Products.AddRange([
+            new Product
+            {
+                Name = "Classic White Shirt",
+                Description = "Breathable cotton shirt for formal and casual wear.",
+                Category = "Shirts",
+                Gender = "Unisex",
+                Size = "S-XL",
+                Color = "White",
+                Price = 29.99m,
+                ImageUrl = "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800",
+                Stock = 50
+            },
+            new Product
+            {
+                Name = "Slim Fit Chinos",
+                Description = "Smart-casual chinos with a modern slim fit.",
+                Category = "Trousers",
+                Gender = "Men",
+                Size = "30-38",
+                Color = "Navy",
+                Price = 39.99m,
+                ImageUrl = "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800",
+                Stock = 40
+            },
+            new Product
+            {
+                Name = "Floral Summer Dress",
+                Description = "Lightweight dress ideal for weekend outings.",
+                Category = "Dresses",
+                Gender = "Women",
+                Size = "XS-L",
+                Color = "Floral",
+                Price = 49.99m,
+                ImageUrl = "https://images.unsplash.com/photo-1495385794356-15371f348c31?w=800",
+                Stock = 35
+            },
+            new Product
+            {
+                Name = "Urban Denim Jacket",
+                Description = "Layer-friendly denim jacket with timeless style.",
+                Category = "Jackets",
+                Gender = "Unisex",
+                Size = "S-XL",
+                Color = "Blue",
+                Price = 59.99m,
+                ImageUrl = "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800",
+                Stock = 25
+            }
+        ]);
+
+        db.SaveChanges();
+    }
+}

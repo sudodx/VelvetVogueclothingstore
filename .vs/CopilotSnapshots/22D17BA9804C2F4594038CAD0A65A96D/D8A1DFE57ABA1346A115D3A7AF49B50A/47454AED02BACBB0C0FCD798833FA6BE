@@ -1,0 +1,377 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/admin")]
+[Authorize(Roles = "Admin")]
+public class AdminApiController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet("categories")]
+    public async Task<IActionResult> Categories()
+    {
+        var categories = await db.Categories
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .Select(x => new { x.Id, x.Name })
+            .ToListAsync();
+
+        return Ok(categories);
+    }
+
+    [HttpGet("products")]
+    public async Task<IActionResult> Products([FromQuery] AdminProductFilterViewModel filter)
+    {
+        var query = db.Products
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var term = filter.Search.Trim().ToLower();
+            query = query.Where(x =>
+                x.Name.ToLower().Contains(term)
+                || x.Description.ToLower().Contains(term));
+        }
+
+        if (filter.CategoryId.HasValue)
+        {
+            query = query.Where(x => x.CategoryId == filter.CategoryId.Value);
+        }
+
+        if (filter.LastWeekOnly)
+        {
+            var weekAgo = DateTime.UtcNow.AddDays(-7);
+            query = query.Where(x => x.DateAdded >= weekAgo);
+        }
+
+        var products = await query
+            .OrderByDescending(x => x.DateAdded)
+            .Select(x => new AdminProductListItemViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Category = x.Category!.Name,
+                Gender = x.Gender,
+                Price = x.Price,
+                Stock = x.Stock,
+                DateAdded = x.DateAdded
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    [HttpGet("products/size-count")]
+    public async Task<IActionResult> ProductCountBySize([FromQuery] int? categoryId, [FromQuery] bool lastWeekOnly = false)
+    {
+        var query = db.Products
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (categoryId.HasValue)
+        {
+            query = query.Where(x => x.CategoryId == categoryId.Value);
+        }
+
+        if (lastWeekOnly)
+        {
+            var weekAgo = DateTime.UtcNow.AddDays(-7);
+            query = query.Where(x => x.DateAdded >= weekAgo);
+        }
+
+        var counts = await query
+            .Where(x => x.Size == "Small" || x.Size == "Medium" || x.Size == "Large" || x.Size == "XL")
+            .GroupBy(x => x.Size)
+            .Select(x => new
+            {
+                size = x.Key,
+                count = x.Count()
+            })
+            .ToListAsync();
+
+        return Ok(counts);
+    }
+
+    [HttpGet("products/{id:int}")]
+    public async Task<IActionResult> ProductById(int id)
+    {
+        var product = await db.Products
+            .AsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(x => new AdminProductUpsertViewModel
+            {
+                Name = x.Name,
+                Description = x.Description,
+                CategoryId = x.CategoryId,
+                Gender = x.Gender,
+                Size = x.Size,
+                Color = x.Color,
+                Price = x.Price,
+                ImageUrl = x.ImageUrl,
+                Stock = x.Stock,
+                DateAdded = x.DateAdded
+            })
+            .FirstOrDefaultAsync();
+
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        return Ok(product);
+    }
+
+    [HttpPost("products")]
+    public async Task<IActionResult> CreateProduct(AdminProductUpsertViewModel request)
+    {
+        var categoryExists = await db.Categories.AnyAsync(x => x.Id == request.CategoryId);
+        if (!categoryExists)
+        {
+            return BadRequest(new { message = "Invalid category." });
+        }
+
+        var product = new Product
+        {
+            Name = request.Name.Trim(),
+            Description = request.Description.Trim(),
+            CategoryId = request.CategoryId,
+            Gender = NormalizeGender(request.Gender),
+            Size = NormalizeSize(request.Size),
+            Color = request.Color.Trim(),
+            Price = request.Price,
+            ImageUrl = request.ImageUrl.Trim(),
+            Stock = request.Stock,
+            DateAdded = request.DateAdded == default ? DateTime.UtcNow : request.DateAdded
+        };
+
+        db.Products.Add(product);
+        await db.SaveChangesAsync();
+
+        return Ok(new { message = "Product created.", id = product.Id });
+    }
+
+    [HttpPut("products/{id:int}")]
+    public async Task<IActionResult> UpdateProduct(int id, AdminProductUpsertViewModel request)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        var categoryExists = await db.Categories.AnyAsync(x => x.Id == request.CategoryId);
+        if (!categoryExists)
+        {
+            return BadRequest(new { message = "Invalid category." });
+        }
+
+        product.Name = request.Name.Trim();
+        product.Description = request.Description.Trim();
+        product.CategoryId = request.CategoryId;
+        product.Gender = NormalizeGender(request.Gender);
+        product.Size = NormalizeSize(request.Size);
+        product.Color = request.Color.Trim();
+        product.Price = request.Price;
+        product.ImageUrl = request.ImageUrl.Trim();
+        product.Stock = request.Stock;
+        product.DateAdded = request.DateAdded == default ? product.DateAdded : request.DateAdded;
+
+        await db.SaveChangesAsync();
+
+        return Ok(new { message = "Product updated." });
+    }
+
+    [HttpDelete("products/{id:int}")]
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        db.Products.Remove(product);
+        await db.SaveChangesAsync();
+
+        return Ok(new { message = "Product deleted." });
+    }
+
+    private static string NormalizeSize(string value)
+    {
+        var normalized = value.Trim().ToLowerInvariant();
+        return normalized switch
+        {
+            "s" or "small" => "Small",
+            "m" or "medium" => "Medium",
+            "l" or "large" => "Large",
+            "xl" or "extra large" => "XL",
+            _ => value.Trim()
+        };
+    }
+
+    private static string NormalizeGender(string value)
+    {
+        var normalized = value.Trim().ToLowerInvariant();
+        return normalized switch
+        {
+            "m" or "male" or "men" => "Male",
+            "f" or "female" or "women" => "Female",
+            _ => value.Trim()
+        };
+    }
+
+    [HttpGet("overview")]
+    public async Task<IActionResult> Overview()
+    {
+        var userCount = await db.UserAccounts.CountAsync();
+        var productCount = await db.Products.CountAsync();
+        var orderCount = await db.Orders.CountAsync();
+        var pendingOrderCount = await db.Orders.CountAsync(x => x.Status == "Pending");
+        var cartItemCount = await db.CartItems.CountAsync();
+
+        return Ok(new
+        {
+            userCount,
+            productCount,
+            orderCount,
+            pendingOrderCount,
+            cartItemCount
+        });
+    }
+
+    [HttpGet("orders")]
+    public async Task<IActionResult> AllOrders()
+    {
+        var orders = await db.Orders
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new
+            {
+                x.Id,
+                x.Status,
+                x.TotalAmount,
+                x.CreatedAtUtc,
+                Customer = x.UserAccount!.FullName,
+                CustomerEmail = x.UserAccount.Email,
+                Address = new
+                {
+                    x.UserAddress!.RecipientName,
+                    x.UserAddress.Line1,
+                    x.UserAddress.City,
+                    x.UserAddress.State,
+                    x.UserAddress.PostalCode,
+                    x.UserAddress.Country
+                },
+                Items = x.Items.Select(i => new
+                {
+                    i.ProductId,
+                    i.ProductNameSnapshot,
+                    i.Quantity,
+                    i.UnitPrice,
+                    i.LineTotal
+                })
+            })
+            .ToListAsync();
+
+        return Ok(orders);
+    }
+
+    [HttpPut("orders/{orderId:int}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, UpdateOrderStatusRequest request)
+    {
+        var order = await db.Orders.FindAsync(orderId);
+        if (order is null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+
+        order.Status = request.Status;
+        await db.SaveChangesAsync();
+
+        return Ok(new { message = "Order status updated." });
+    }
+
+    [HttpGet("cart-items")]
+    public async Task<IActionResult> CartItems()
+    {
+        var cartItems = await db.CartItems
+            .OrderByDescending(x => x.Id)
+            .Select(x => new
+            {
+                x.Id,
+                x.UserAccountId,
+                CustomerName = x.UserAccount!.FullName,
+                CustomerEmail = x.UserAccount.Email,
+                x.ProductId,
+                ProductName = x.Product!.Name,
+                x.Quantity,
+                UnitPrice = x.Product.Price,
+                LineTotal = x.Product.Price * x.Quantity
+            })
+            .ToListAsync();
+
+        return Ok(cartItems);
+    }
+
+    [HttpGet("users")]
+    public async Task<IActionResult> Users()
+    {
+        var users = await db.UserAccounts
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new
+            {
+                x.Id,
+                x.FullName,
+                x.Email,
+                x.Role,
+                x.CreatedAtUtc
+            })
+            .ToListAsync();
+
+        return Ok(users);
+    }
+
+    public record UpdateOrderStatusRequest(string Status);
+}
+
+[Route("admin")]
+public class AdminController : Controller
+{
+    [HttpGet("")]
+    public IActionResult Index()
+    {
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return LocalRedirect("/admin/login");
+        }
+
+        if (!User.IsInRole("Admin"))
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        return View();
+    }
+
+    [HttpGet("login")]
+    public IActionResult Login()
+    {
+        if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+        {
+            return LocalRedirect("/admin");
+        }
+
+        return View();
+    }
+
+    [HttpGet("~/system-admin/signin")]
+    public IActionResult LegacyLogin()
+    {
+        return LocalRedirect("/admin/login");
+    }
+}

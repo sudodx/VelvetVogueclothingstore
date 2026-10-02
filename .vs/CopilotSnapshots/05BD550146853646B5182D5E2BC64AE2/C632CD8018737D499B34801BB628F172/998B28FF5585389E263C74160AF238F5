@@ -1,0 +1,36 @@
+﻿using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Data;
+
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+{
+    public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<UserAccount>()
+            .HasIndex(x => x.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<CartItem>()
+            .HasOne(x => x.UserAccount)
+            .WithMany()
+            .HasForeignKey(x => x.UserAccountId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<CartItem>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<CartItem>()
+            .HasIndex(x => new { x.UserAccountId, x.ProductId })
+            .IsUnique();
+    }
+}

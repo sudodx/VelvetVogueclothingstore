@@ -1,0 +1,98 @@
+﻿using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Data;
+
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+{
+    public DbSet<UserAccount> UserAccounts => Set<UserAccount>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductSizeStock> ProductSizeStocks => Set<ProductSizeStock>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+    public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<UserAccount>()
+            .HasIndex(x => x.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<UserAccount>()
+            .Property(x => x.Role)
+            .HasMaxLength(32);
+
+        modelBuilder.Entity<Category>()
+            .HasIndex(x => x.Name)
+            .IsUnique();
+
+        modelBuilder.Entity<Product>()
+            .HasOne(x => x.Category)
+            .WithMany(x => x.Products)
+            .HasForeignKey(x => x.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ProductSizeStock>()
+            .HasOne(x => x.Product)
+            .WithMany(x => x.SizeStocks)
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ProductSizeStock>()
+            .HasIndex(x => new { x.ProductId, x.Size })
+            .IsUnique();
+
+        modelBuilder.Entity<CartItem>()
+            .HasOne(x => x.UserAccount)
+            .WithMany()
+            .HasForeignKey(x => x.UserAccountId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<CartItem>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<CartItem>()
+            .HasIndex(x => new { x.UserAccountId, x.ProductId })
+            .IsUnique();
+
+        modelBuilder.Entity<UserAddress>()
+            .HasOne(x => x.UserAccount)
+            .WithMany()
+            .HasForeignKey(x => x.UserAccountId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserAddress>()
+            .HasIndex(x => new { x.UserAccountId, x.IsDefaultShipping });
+
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.UserAccount)
+            .WithMany()
+            .HasForeignKey(x => x.UserAccountId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Order>()
+            .HasOne(x => x.UserAddress)
+            .WithMany()
+            .HasForeignKey(x => x.UserAddressId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(x => x.Order)
+            .WithMany(x => x.Items)
+            .HasForeignKey(x => x.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(x => x.Product)
+            .WithMany()
+            .HasForeignKey(x => x.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+}

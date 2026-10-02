@@ -1,0 +1,115 @@
+﻿using VelvetVogueclothingstore.Models;
+using Microsoft.AspNetCore.Identity;
+
+namespace VelvetVogueclothingstore.Data;
+
+public static class SeedData
+{
+    public static void Initialize(ApplicationDbContext db)
+    {
+        SeedAdmin(db);
+        SeedCategories(db);
+
+        if (db.Products.Any())
+        {
+            return;
+        }
+
+        var categoryIds = db.Categories.ToDictionary(x => x.Name, x => x.Id);
+
+        db.Products.AddRange([
+            new Product
+            {
+                Name = "Classic White Shirt",
+                Description = "Breathable cotton shirt for formal and casual wear.",
+                CategoryId = categoryIds["Shirts"],
+                Gender = "Unisex",
+                Size = "S-XL",
+                Color = "White",
+                Price = 29.99m,
+                ImageUrl = "/img/categories/shirts/classic-white-shirt.jpg",
+                Stock = 50,
+                DateAdded = DateTime.UtcNow.AddDays(-14)
+            },
+            new Product
+            {
+                Name = "Slim Fit Chinos",
+                Description = "Smart-casual chinos with a modern slim fit.",
+                CategoryId = categoryIds["Trousers"],
+                Gender = "Men",
+                Size = "30-38",
+                Color = "Navy",
+                Price = 39.99m,
+                ImageUrl = "/img/categories/trousers/slim-fit-chinos.jpg",
+                Stock = 40,
+                DateAdded = DateTime.UtcNow.AddDays(-10)
+            },
+            new Product
+            {
+                Name = "Floral Summer Dress",
+                Description = "Lightweight dress ideal for weekend outings.",
+                CategoryId = categoryIds["Dresses"],
+                Gender = "Women",
+                Size = "XS-L",
+                Color = "Floral",
+                Price = 49.99m,
+                ImageUrl = "/img/categories/dresses/floral-summer-dress.jpg",
+                Stock = 35,
+                DateAdded = DateTime.UtcNow.AddDays(-3)
+            },
+            new Product
+            {
+                Name = "Urban Denim Jacket",
+                Description = "Layer-friendly denim jacket with timeless style.",
+                CategoryId = categoryIds["Jackets"],
+                Gender = "Unisex",
+                Size = "S-XL",
+                Color = "Blue",
+                Price = 59.99m,
+                ImageUrl = "/img/categories/jackets/urban-denim-jacket.jpg",
+                Stock = 25,
+                DateAdded = DateTime.UtcNow.AddDays(-1)
+            }
+        ]);
+
+        db.SaveChanges();
+    }
+
+    private static void SeedCategories(ApplicationDbContext db)
+    {
+        if (db.Categories.Any())
+        {
+            return;
+        }
+
+        db.Categories.AddRange([
+            new Category { Name = "Shirts" },
+            new Category { Name = "Trousers" },
+            new Category { Name = "Dresses" },
+            new Category { Name = "Jackets" }
+        ]);
+
+        db.SaveChanges();
+    }
+
+    private static void SeedAdmin(ApplicationDbContext db)
+    {
+        if (db.UserAccounts.Any(x => x.Email == "admin@velvetvogue.com"))
+        {
+            return;
+        }
+
+        var admin = new UserAccount
+        {
+            FullName = "Velvet Vogue Admin",
+            Email = "admin@velvetvogue.com",
+            Role = "Admin"
+        };
+
+        var hasher = new PasswordHasher<UserAccount>();
+        admin.PasswordHash = hasher.HashPassword(admin, "Admin@123");
+
+        db.UserAccounts.Add(admin);
+        db.SaveChanges();
+    }
+}

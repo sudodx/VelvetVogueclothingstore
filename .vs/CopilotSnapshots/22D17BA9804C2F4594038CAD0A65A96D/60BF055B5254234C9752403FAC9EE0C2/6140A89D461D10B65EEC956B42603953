@@ -1,0 +1,532 @@
+﻿window.StoreApp = (() => {
+    const api = {
+        async get(url) {
+            const response = await fetch(url, { credentials: "include" });
+            return parseResponse(response);
+        },
+        async send(url, method, body) {
+            const response = await fetch(url, {
+                method,
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: body ? JSON.stringify(body) : null
+            });
+            return parseResponse(response);
+        }
+    };
+
+    async function parseResponse(response) {
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!response.ok) {
+            throw new Error(data?.message || "Request failed");
+        }
+
+        return data;
+    }
+
+    function showAlert(id, message, type = "info") {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.className = `alert alert-${type}`;
+        el.textContent = message;
+        el.classList.remove("d-none");
+    }
+
+    function hideAlert(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add("d-none");
+    }
+
+    async function initProductsPage() {
+        const grid = document.getElementById("productsGrid");
+        if (!grid) return;
+
+        const loadProducts = async () => {
+            hideAlert("productsAlert");
+            const category = document.getElementById("categoryFilter").value;
+            const gender = document.getElementById("genderFilter").value;
+            const query = new URLSearchParams();
+
+            if (category) query.set("category", category);
+            if (gender) query.set("gender", gender);
+
+            try {
+                const products = await api.get(`/api/products?${query.toString()}`);
+                grid.innerHTML = products.map(p => `
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card h-100">
+                            <img src="${p.imageUrl}" class="card-img-top" alt="${p.name}" style="height:220px;object-fit:cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${p.name}</h5>
+                                <p class="card-text small text-muted">${p.category} • ${p.gender} • ${p.size}</p>
+                                <p class="card-text">${p.description}</p>
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <strong>$${Number(p.price).toFixed(2)}</strong>
+                                    <button class="btn btn-sm btn-dark" data-product-id="${p.id}">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`).join("");
+            } catch (e) {
+                showAlert("productsAlert", e.message, "danger");
+            }
+        };
+
+        document.getElementById("applyFilters").addEventListener("click", loadProducts);
+
+        grid.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-product-id]");
+            if (!button) return;
+
+            try {
+                await api.send("/api/cart/add", "POST", { productId: Number(button.dataset.productId), quantity: 1 });
+                showAlert("productsAlert", "Item added to cart.", "success");
+            } catch (e) {
+                showAlert("productsAlert", `${e.message}. Please login first.`, "warning");
+            }
+        });
+
+        await loadProducts();
+    }
+
+    function formToObject(form) {
+        return Object.fromEntries(new FormData(form).entries());
+    }
+
+    function normalizeAddressPayload(payload) {
+        return {
+            ...payload,
+            isDefaultShipping: payload.isDefaultShipping === "true" || payload.isDefaultShipping === "on"
+        };
+    }
+
+    async function loadAddressOptions(selectId) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+
+        const addresses = await api.get("/api/addresses");
+        select.innerHTML = addresses.map(a =>
+            `<option value="${a.id}">${a.recipientName} - ${a.line1}, ${a.city}${a.isDefaultShipping ? " (Default)" : ""}</option>`
+        ).join("");
+    }
+
+    async function initAccountPage() {
+        const loginForm = document.getElementById("loginForm");
+        if (!loginForm) return;
+
+        const registerForm = document.getElementById("registerForm");
+        const addressForm = document.getElementById("addressForm");
+        const addressList = document.getElementById("addressList");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        const refreshUser = async () => {
+            try {
+                const me = await api.get("/api/auth/me");
+                showAlert("authStatus", `Logged in as ${me.fullName} (${me.email}) - ${me.role}`, "success");
+            } catch {
+                showAlert("authStatus", "Not logged in", "secondary");
+            }
+        };
+
+        const loadAddresses = async () => {
+            if (!addressList) return;
+
+            try {
+                const addresses = await api.get("/api/addresses");
+                addressList.innerHTML = addresses.map(a =>
+                    `<li class="list-group-item">${a.recipientName}, ${a.line1}, ${a.city}, ${a.state}, ${a.postalCode}, ${a.country}${a.isDefaultShipping ? " <span class='badge text-bg-dark'>Default</span>" : ""}</li>`
+                ).join("");
+            } catch {
+                addressList.innerHTML = "<li class='list-group-item text-muted'>Login to manage addresses.</li>";
+            }
+        };
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(loginForm);
+            try {
+                await api.send("/api/auth/login", "POST", payload);
+                await refreshUser();
+                await loadAddresses();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        registerForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(registerForm);
+            try {
+                await api.send("/api/auth/register", "POST", payload);
+                await refreshUser();
+                await loadAddresses();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        addressForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = normalizeAddressPayload(formToObject(addressForm));
+            try {
+                await api.send("/api/addresses", "POST", payload);
+                showAlert("authStatus", "Address saved.", "success");
+                addressForm.reset();
+                await loadAddresses();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await api.send("/api/auth/logout", "POST");
+                await refreshUser();
+                await loadAddresses();
+            } catch (e) {
+                showAlert("authStatus", e.message, "danger");
+            }
+        });
+
+        await refreshUser();
+        await loadAddresses();
+    }
+
+    async function initCartPage() {
+        const body = document.getElementById("cartItemsBody");
+        if (!body) return;
+
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        const checkoutAddress = document.getElementById("checkoutAddress");
+
+        const loadCart = async () => {
+            hideAlert("cartAlert");
+            try {
+                const cart = await api.get("/api/cart");
+                body.innerHTML = cart.items.map(i => `
+                    <tr>
+                        <td>${i.productName}</td>
+                        <td>$${Number(i.price).toFixed(2)}</td>
+                        <td><input class="form-control form-control-sm" type="number" min="1" value="${i.quantity}" data-item-id="${i.id}" style="max-width:90px"></td>
+                        <td>$${Number(i.lineTotal).toFixed(2)}</td>
+                        <td><button class="btn btn-sm btn-outline-danger" data-remove-id="${i.id}">Remove</button></td>
+                    </tr>`).join("");
+                document.getElementById("cartTotal").textContent = Number(cart.total).toFixed(2);
+                await loadAddressOptions("checkoutAddress");
+            } catch (e) {
+                body.innerHTML = "";
+                document.getElementById("cartTotal").textContent = "0.00";
+                if (checkoutAddress) {
+                    checkoutAddress.innerHTML = "";
+                }
+                showAlert("cartAlert", `${e.message}. Please login to view your cart.`, "warning");
+            }
+        };
+
+        body.addEventListener("change", async (event) => {
+            const input = event.target.closest("input[data-item-id]");
+            if (!input) return;
+
+            await api.send(`/api/cart/item/${input.dataset.itemId}`, "PUT", { quantity: Number(input.value) });
+            await loadCart();
+        });
+
+        body.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-remove-id]");
+            if (!button) return;
+
+            await api.send(`/api/cart/item/${button.dataset.removeId}`, "DELETE");
+            await loadCart();
+        });
+
+        checkoutBtn.addEventListener("click", async () => {
+            try {
+                const userAddressId = Number(checkoutAddress.value);
+                await api.send("/api/orders/checkout", "POST", { userAddressId });
+                showAlert("cartAlert", "Order placed successfully.", "success");
+                await loadCart();
+            } catch (e) {
+                showAlert("cartAlert", e.message, "danger");
+            }
+        });
+
+        await loadCart();
+    }
+
+    async function initOrdersPage() {
+        const container = document.getElementById("ordersContainer");
+        if (!container) return;
+
+        try {
+            const orders = await api.get("/api/orders/mine");
+            if (!orders.length) {
+                container.innerHTML = "<div class='text-muted'>No orders yet.</div>";
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Order #${order.id}</strong>
+                            <span class="badge text-bg-secondary">${order.status}</span>
+                        </div>
+                        <div class="small text-muted mb-2">${new Date(order.createdAtUtc).toLocaleString()}</div>
+                        <div class="mb-2">Ship to: ${order.shippingAddress.recipientName}, ${order.shippingAddress.line1}, ${order.shippingAddress.city}</div>
+                        <ul class="mb-2">${order.items.map(i => `<li>${i.productNameSnapshot} x ${i.quantity} - $${Number(i.lineTotal).toFixed(2)}</li>`).join("")}</ul>
+                        <strong>Total: $${Number(order.totalAmount).toFixed(2)}</strong>
+                    </div>
+                </div>
+            `).join("");
+        } catch (e) {
+            showAlert("ordersAlert", `${e.message}. Please login to view orders.`, "warning");
+        }
+    }
+
+    async function initAdminPage() {
+        const overview = document.getElementById("adminOverview");
+        if (!overview) return;
+
+        const productForm = document.getElementById("adminProductForm");
+        const productsBody = document.getElementById("adminProductsBody");
+        const productSearch = document.getElementById("adminProductSearch");
+        const categoryFilter = document.getElementById("adminCategoryFilter");
+        const lastWeekOnly = document.getElementById("adminLastWeekOnly");
+        const applyProductFilters = document.getElementById("adminApplyProductFilters");
+        const productCategorySelect = document.getElementById("adminProductCategoryId");
+        const productFormTitle = document.getElementById("adminProductFormTitle");
+        const productSubmitButton = document.getElementById("adminProductSubmit");
+        const cancelEditButton = document.getElementById("adminProductCancelEdit");
+        const sizeCountsContainer = document.getElementById("adminSizeCounts");
+        const ordersBody = document.getElementById("adminOrdersBody");
+        const cartBody = document.getElementById("adminCartBody");
+
+        let categories = [];
+
+        const loadOverview = async () => {
+            const stats = await api.get("/api/admin/overview");
+            overview.innerHTML = [
+                ["Users", stats.userCount],
+                ["Products", stats.productCount],
+                ["Orders", stats.orderCount],
+                ["Pending", stats.pendingOrderCount],
+                ["Cart Items", stats.cartItemCount]
+            ].map(s => `
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="card text-center h-100">
+                        <div class="card-body"><div class="small text-muted">${s[0]}</div><div class="fs-4 fw-semibold">${s[1]}</div></div>
+                    </div>
+                </div>`).join("");
+        };
+
+        const toDateTimeLocal = value => {
+            if (!value) return "";
+            const date = new Date(value);
+            const offset = date.getTimezoneOffset();
+            const local = new Date(date.getTime() - offset * 60000);
+            return local.toISOString().slice(0, 16);
+        };
+
+        const resetProductForm = () => {
+            productForm.reset();
+            productForm.elements.id.value = "";
+            productFormTitle.textContent = "Add Product";
+            productSubmitButton.textContent = "Create Product";
+        };
+
+        const loadCategories = async () => {
+            categories = await api.get("/api/admin/categories");
+            categoryFilter.innerHTML = `<option value="">All categories</option>${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("")}`;
+            productCategorySelect.innerHTML = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+        };
+
+        const loadProducts = async () => {
+            const query = new URLSearchParams();
+            if (productSearch.value.trim()) query.set("search", productSearch.value.trim());
+            if (categoryFilter.value) query.set("categoryId", categoryFilter.value);
+            if (lastWeekOnly.checked) query.set("lastWeekOnly", "true");
+
+            const products = await api.get(`/api/admin/products?${query.toString()}`);
+            productsBody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>$${Number(p.price).toFixed(2)}</td>
+                    <td>${p.stock}</td>
+                    <td>${new Date(p.dateAdded).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" data-edit-product="${p.id}">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" data-delete-product="${p.id}">Delete</button>
+                    </td>
+                </tr>
+            `).join("");
+        };
+
+        const loadSizeCounts = async () => {
+            const query = new URLSearchParams();
+            if (categoryFilter.value) query.set("categoryId", categoryFilter.value);
+            if (lastWeekOnly.checked) query.set("lastWeekOnly", "true");
+
+            const counts = await api.get(`/api/admin/products/size-count?${query.toString()}`);
+            const map = new Map(counts.map(x => [x.size, x.count]));
+            const sizes = ["Small", "Medium", "Large", "XL"];
+
+            sizeCountsContainer.innerHTML = sizes.map(size => `
+                <div class="col-6 col-md-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body py-2">
+                            <div class="small text-muted">${size}</div>
+                            <div class="fs-5 fw-semibold">${map.get(size) ?? 0}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        };
+
+        const loadOrders = async () => {
+            const orders = await api.get("/api/admin/orders");
+            ordersBody.innerHTML = orders.map(o => `
+                <tr>
+                    <td>${o.id}</td>
+                    <td>${o.customer}</td>
+                    <td>
+                        <select class="form-select form-select-sm" data-order-id="${o.id}">
+                            ${["Pending", "Processing", "Shipped", "Delivered", "Cancelled"].map(s => `<option value="${s}" ${o.status === s ? "selected" : ""}>${s}</option>`).join("")}
+                        </select>
+                    </td>
+                    <td>$${Number(o.totalAmount).toFixed(2)}</td>
+                    <td>${new Date(o.createdAtUtc).toLocaleDateString()}</td>
+                    <td><button class="btn btn-sm btn-outline-dark" data-save-order="${o.id}">Save</button></td>
+                </tr>`).join("");
+        };
+
+        const loadCartItems = async () => {
+            const items = await api.get("/api/admin/cart-items");
+            cartBody.innerHTML = items.map(i => `
+                <tr>
+                    <td>${i.customerName}</td>
+                    <td>${i.productName}</td>
+                    <td>${i.quantity}</td>
+                    <td>$${Number(i.lineTotal).toFixed(2)}</td>
+                </tr>`).join("");
+        };
+
+        applyProductFilters.addEventListener("click", async () => {
+            try {
+                await loadProducts();
+                await loadSizeCounts();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        cancelEditButton.addEventListener("click", () => resetProductForm());
+
+        productsBody.addEventListener("click", async (event) => {
+            const editButton = event.target.closest("button[data-edit-product]");
+            if (editButton) {
+                try {
+                    const product = await api.get(`/api/admin/products/${editButton.dataset.editProduct}`);
+                    productForm.elements.id.value = editButton.dataset.editProduct;
+                    productForm.elements.name.value = product.name;
+                    productForm.elements.description.value = product.description;
+                    productForm.elements.categoryId.value = String(product.categoryId);
+                    productForm.elements.gender.value = product.gender;
+                    productForm.elements.size.value = product.size;
+                    productForm.elements.color.value = product.color;
+                    productForm.elements.price.value = product.price;
+                    productForm.elements.imageUrl.value = product.imageUrl;
+                    productForm.elements.stock.value = product.stock;
+                    productForm.elements.dateAdded.value = toDateTimeLocal(product.dateAdded);
+                    productFormTitle.textContent = `Edit Product #${editButton.dataset.editProduct}`;
+                    productSubmitButton.textContent = "Update Product";
+                    window.scrollTo({ top: productForm.offsetTop - 100, behavior: "smooth" });
+                } catch (e) {
+                    showAlert("adminAlert", e.message, "danger");
+                }
+                return;
+            }
+
+            const deleteButton = event.target.closest("button[data-delete-product]");
+            if (!deleteButton) return;
+
+            if (!confirm("Delete this product?")) return;
+
+            try {
+                await api.send(`/api/admin/products/${deleteButton.dataset.deleteProduct}`, "DELETE");
+                showAlert("adminAlert", "Product deleted.", "success");
+                await loadProducts();
+                await loadSizeCounts();
+                await loadOverview();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        productForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const payload = formToObject(productForm);
+            const productId = payload.id;
+            delete payload.id;
+            payload.categoryId = Number(payload.categoryId);
+            payload.price = Number(payload.price);
+            payload.stock = Number(payload.stock);
+            payload.dateAdded = payload.dateAdded ? new Date(payload.dateAdded).toISOString() : null;
+
+            try {
+                if (productId) {
+                    await api.send(`/api/admin/products/${productId}`, "PUT", payload);
+                    showAlert("adminAlert", "Product updated.", "success");
+                } else {
+                    await api.send("/api/admin/products", "POST", payload);
+                    showAlert("adminAlert", "Product created.", "success");
+                }
+                resetProductForm();
+                await loadProducts();
+                await loadSizeCounts();
+                await loadOverview();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        ordersBody.addEventListener("click", async (event) => {
+            const button = event.target.closest("button[data-save-order]");
+            if (!button) return;
+
+            const orderId = button.dataset.saveOrder;
+            const select = ordersBody.querySelector(`select[data-order-id='${orderId}']`);
+
+            try {
+                await api.send(`/api/admin/orders/${orderId}/status`, "PUT", { status: select.value });
+                showAlert("adminAlert", "Order status updated.", "success");
+                await loadOrders();
+            } catch (e) {
+                showAlert("adminAlert", e.message, "danger");
+            }
+        });
+
+        try {
+            await loadCategories();
+            resetProductForm();
+            await loadProducts();
+            await loadSizeCounts();
+            await loadOverview();
+            await loadOrders();
+            await loadCartItems();
+        } catch (e) {
+            showAlert("adminAlert", `${e.message}. Login as admin to access this page.`, "warning");
+        }
+    }
+
+    return {
+        initProductsPage,
+        initCartPage,
+        initAccountPage,
+        initOrdersPage,
+        initAdminPage
+    };
+})();

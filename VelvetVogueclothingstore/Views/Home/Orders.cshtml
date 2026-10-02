@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h2 class="mb-3">My Orders</h2>
+<div id="ordersAlert" class="alert alert-info d-none"></div>
+<div id="ordersContainer" class="vstack gap-3"></div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initOrdersPage();
+    </script>
+}

@@ -1,0 +1,115 @@
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class CartController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet]
+    public async Task<IActionResult> GetCart()
+    {
+        var userId = GetUserId();
+
+        var items = await db.CartItems
+            .Where(x => x.UserAccountId == userId)
+            .Include(x => x.Product)
+            .Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                ProductName = x.Product!.Name,
+                Price = x.Product.Price,
+                x.Quantity,
+                LineTotal = x.Quantity * x.Product.Price
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            items,
+            total = items.Sum(x => x.LineTotal)
+        });
+    }
+
+    [HttpPost("add")]
+    public async Task<IActionResult> AddToCart(AddToCartRequest request)
+    {
+        var userId = GetUserId();
+
+        var product = await db.Products.FindAsync(request.ProductId);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        var existingItem = await db.CartItems.SingleOrDefaultAsync(x => x.UserAccountId == userId && x.ProductId == request.ProductId);
+
+        if (existingItem is null)
+        {
+            db.CartItems.Add(new CartItem
+            {
+                UserAccountId = userId,
+                ProductId = request.ProductId,
+                Quantity = request.Quantity
+            });
+        }
+        else
+        {
+            existingItem.Quantity += request.Quantity;
+        }
+
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Added to cart" });
+    }
+
+    [HttpPut("item/{itemId:int}")]
+    public async Task<IActionResult> UpdateQuantity(int itemId, UpdateCartItemRequest request)
+    {
+        var userId = GetUserId();
+        var item = await db.CartItems.SingleOrDefaultAsync(x => x.Id == itemId && x.UserAccountId == userId);
+        if (item is null)
+        {
+            return NotFound(new { message = "Cart item not found." });
+        }
+
+        item.Quantity = request.Quantity;
+        if (item.Quantity <= 0)
+        {
+            db.CartItems.Remove(item);
+        }
+
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Cart updated" });
+    }
+
+    [HttpDelete("item/{itemId:int}")]
+    public async Task<IActionResult> RemoveItem(int itemId)
+    {
+        var userId = GetUserId();
+        var item = await db.CartItems.SingleOrDefaultAsync(x => x.Id == itemId && x.UserAccountId == userId);
+        if (item is null)
+        {
+            return NotFound(new { message = "Cart item not found." });
+        }
+
+        db.CartItems.Remove(item);
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Removed" });
+    }
+
+    private int GetUserId()
+    {
+        var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.Parse(userIdValue!);
+    }
+
+    public record AddToCartRequest(int ProductId, int Quantity = 1);
+    public record UpdateCartItemRequest(int Quantity);
+}

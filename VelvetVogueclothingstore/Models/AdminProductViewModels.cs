@@ -1,0 +1,68 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace VelvetVogueclothingstore.Models;
+
+public class AdminProductListItemViewModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty;
+    public string Gender { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public int TotalStock { get; set; }
+    public DateTime DateAdded { get; set; }
+}
+
+public class AdminProductUpsertViewModel
+{
+    [Required]
+    [MaxLength(160)]
+    public string Name { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(1000)]
+    public string Description { get; set; } = string.Empty;
+
+    [Required]
+    public int CategoryId { get; set; }
+
+    public int? MainCategoryId { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string Gender { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(50)]
+    public string Color { get; set; } = string.Empty;
+
+    [Range(0, 1000000)]
+    public decimal Price { get; set; }
+
+    [Required]
+    [MaxLength(500)]
+    public string ImageUrl { get; set; } = string.Empty;
+
+    [MinLength(1)]
+    public List<SizeQuantityViewModel> SizeStocks { get; set; } = [];
+
+    public DateTime DateAdded { get; set; }
+}
+
+public class SizeQuantityViewModel
+{
+    [Required]
+    [MaxLength(50)]
+    public string Size { get; set; } = string.Empty;
+
+    [Range(0, int.MaxValue)]
+    public int Quantity { get; set; }
+}
+
+public class AdminProductFilterViewModel
+{
+    public string? Search { get; set; }
+    public int? MainCategoryId { get; set; }
+    public int? CategoryId { get; set; }
+    public bool LastWeekOnly { get; set; }
+}

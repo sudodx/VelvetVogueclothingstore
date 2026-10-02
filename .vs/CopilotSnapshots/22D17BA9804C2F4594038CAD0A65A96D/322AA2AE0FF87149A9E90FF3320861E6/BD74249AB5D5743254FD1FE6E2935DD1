@@ -1,0 +1,192 @@
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.FullName)
+            || string.IsNullOrWhiteSpace(request.Email)
+            || string.IsNullOrWhiteSpace(request.Password)
+            || string.IsNullOrWhiteSpace(request.RecipientName)
+            || string.IsNullOrWhiteSpace(request.PhoneNumber)
+            || string.IsNullOrWhiteSpace(request.Line1)
+            || string.IsNullOrWhiteSpace(request.City)
+            || string.IsNullOrWhiteSpace(request.State)
+            || string.IsNullOrWhiteSpace(request.PostalCode)
+            || string.IsNullOrWhiteSpace(request.Country))
+        {
+            return BadRequest(new { message = "Please fill all required registration and shipping details." });
+        }
+
+        var email = request.Email.Trim().ToLowerInvariant();
+        if (await db.UserAccounts.AnyAsync(x => x.Email == email))
+        {
+            return BadRequest(new { message = "Email already exists." });
+        }
+
+        var user = new UserAccount
+        {
+            Email = email,
+            FullName = request.FullName.Trim(),
+            Role = "Customer"
+        };
+
+        var hasher = new PasswordHasher<UserAccount>();
+        user.PasswordHash = hasher.HashPassword(user, request.Password);
+
+        db.UserAccounts.Add(user);
+        await db.SaveChangesAsync();
+
+        db.UserAddresses.Add(new UserAddress
+        {
+            UserAccountId = user.Id,
+            RecipientName = request.RecipientName.Trim(),
+            PhoneNumber = request.PhoneNumber.Trim(),
+            Line1 = request.Line1.Trim(),
+            Line2 = string.IsNullOrWhiteSpace(request.Line2) ? null : request.Line2.Trim(),
+            City = request.City.Trim(),
+            State = request.State.Trim(),
+            PostalCode = request.PostalCode.Trim(),
+            Country = request.Country.Trim(),
+            IsDefaultShipping = request.IsDefaultShipping
+        });
+        await db.SaveChangesAsync();
+
+        await SignInUser(user);
+
+        return Ok(new { user.Id, user.Email, user.FullName });
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
+        var email = request.Email.Trim().ToLowerInvariant();
+        var user = await db.UserAccounts.SingleOrDefaultAsync(x => x.Email == email);
+        if (user is null)
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+
+        var hasher = new PasswordHasher<UserAccount>();
+        var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+
+        if (string.Equals(user.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+        {
+            return Unauthorized(new { message = "Use admin login." });
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Role))
+        {
+            user.Role = "Customer";
+            await db.SaveChangesAsync();
+        }
+
+        await SignInUser(user);
+
+        return Ok(new { user.Id, user.Email, user.FullName });
+    }
+
+    [HttpPost("admin-login")]
+    public async Task<IActionResult> AdminLogin(LoginRequest request)
+    {
+        var email = request.Email.Trim().ToLowerInvariant();
+        var user = await db.UserAccounts.SingleOrDefaultAsync(x => x.Email == email);
+        if (user is null)
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+
+        var hasher = new PasswordHasher<UserAccount>();
+        var result = hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+
+        if (!string.Equals(user.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+        {
+            return Forbid();
+        }
+
+        await SignInUser(user);
+        return Ok(new { user.Id, user.Email, user.FullName });
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok(new { message = "Logged out" });
+    }
+
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new
+        {
+            id = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            email = User.FindFirstValue(ClaimTypes.Email),
+            fullName = User.FindFirstValue(ClaimTypes.Name),
+            role = User.FindFirstValue(ClaimTypes.Role)
+        });
+    }
+
+    private async Task SignInUser(UserAccount user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Name, user.FullName),
+            new(ClaimTypes.Role, user.Role)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            claimsPrincipal,
+            new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
+            });
+    }
+
+    public record RegisterRequest(
+        string FullName,
+        string Email,
+        string Password,
+        string RecipientName,
+        string PhoneNumber,
+        string Line1,
+        string? Line2,
+        string City,
+        string State,
+        string PostalCode,
+        string Country,
+        bool IsDefaultShipping);
+    public record LoginRequest(string Email, string Password);
+}

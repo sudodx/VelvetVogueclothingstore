@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Account";
+}
+
+<div class="row g-4">
+    <div class="col-lg-6 col-xl-5">
+        <div class="card">
+            <div class="card-body">
+                <h4>Customer Login</h4>
+                <form id="loginForm" class="mt-3">
+                    <div class="mb-3">
+                        <label class="form-label">Username (Email)</label>
+                        <input class="form-control" name="email" type="email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" name="password" type="password" required />
+                    </div>
+                    <button class="btn btn-dark" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="authStatus" class="alert alert-info mt-4 d-none"></div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initAccountPage();
+    </script>
+}

@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+}
+
+<h2 class="mb-3">Admin Panel</h2>
+<div id="adminAlert" class="alert alert-info d-none"></div>
+
+<div class="row g-3 mb-4" id="adminOverview"></div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="mb-3">Products Management</h5>
+        <div class="row g-2 mb-3">
+            <div class="col-md-5"><input id="adminProductSearch" class="form-control" placeholder="Search by name or description" /></div>
+            <div class="col-md-4"><select id="adminCategoryFilter" class="form-select"><option value="">All categories</option></select></div>
+            <div class="col-md-2 form-check d-flex align-items-center px-4">
+                <input id="adminLastWeekOnly" class="form-check-input me-2" type="checkbox" />
+                <label class="form-check-label" for="adminLastWeekOnly">Last week</label>
+            </div>
+            <div class="col-md-1 d-grid"><button id="adminApplyProductFilters" type="button" class="btn btn-outline-dark">Go</button></div>
+        </div>
+
+        <div class="row g-2 mb-3" id="adminSizeCounts"></div>
+
+        <div class="table-responsive mb-4">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Date Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductsBody"></tbody>
+            </table>
+        </div>
+
+        <h6 id="adminProductFormTitle" class="mb-2">Add Product</h6>
+        <form id="adminProductForm" class="row g-2">
+            <input type="hidden" name="id" />
+            <div class="col-md-6"><input class="form-control" name="name" placeholder="Name" required /></div>
+            <div class="col-md-6"><select class="form-select" name="categoryId" id="adminProductCategoryId" required></select></div>
+            <div class="col-md-6">
+                <select class="form-select" name="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-select" name="size" required>
+                    <option value="">Select size</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
+            <div class="col-md-6"><input class="form-control" name="color" placeholder="Color" required /></div>
+            <div class="col-md-6"><input class="form-control" name="stock" type="number" min="0" placeholder="Stock" required /></div>
+            <div class="col-md-6"><input class="form-control" name="price" type="number" min="0" step="0.01" placeholder="Price" required /></div>
+            <div class="col-md-6"><input class="form-control" name="imageUrl" placeholder="Image URL" required /></div>
+            <div class="col-md-6"><input class="form-control" name="dateAdded" type="datetime-local" /></div>
+            <div class="col-12"><textarea class="form-control" name="description" rows="2" placeholder="Description" required></textarea></div>
+            <div class="col-12 d-grid d-md-flex gap-2">
+                <button id="adminProductSubmit" class="btn btn-dark" type="submit">Create Product</button>
+                <button id="adminProductCancelEdit" class="btn btn-outline-secondary" type="button">Cancel Edit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Orders Management</h5>
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adminOrdersBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5>Active Cart Items</h5>
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Line Total</th>
+                    </tr>
+                </thead>
+                <tbody id="adminCartBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initAdminPage();
+    </script>
+}

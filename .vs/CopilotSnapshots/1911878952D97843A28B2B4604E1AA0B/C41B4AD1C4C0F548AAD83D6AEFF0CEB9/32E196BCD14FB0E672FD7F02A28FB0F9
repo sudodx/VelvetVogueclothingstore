@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="py-5 text-center bg-light rounded-3 mb-4">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Velvet Vogue</h1>
+        <p class="lead">Trendy casualwear and formalwear for your daily identity.</p>
+        <a class="btn btn-dark btn-lg" asp-controller="Home" asp-action="Products">Shop Collection</a>
+    </div>
+</section>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">New Arrivals</h5>
+                <p class="card-text">Fresh seasonal styles updated weekly.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Fast Checkout</h5>
+                <p class="card-text">Add items to cart and complete your order quickly.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Responsive Experience</h5>
+                <p class="card-text">Optimized shopping across desktop, tablet, and mobile.</p>
+            </div>
+        </div>
+    </div>
+</div>

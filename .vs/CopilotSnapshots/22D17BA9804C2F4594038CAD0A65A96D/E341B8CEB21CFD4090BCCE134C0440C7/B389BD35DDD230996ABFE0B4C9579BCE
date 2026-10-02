@@ -1,0 +1,214 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] string? category, [FromQuery] string? gender, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice)
+    {
+        var query = db.Products
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .Include(x => x.SizeStocks)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(category))
+        {
+            query = query.Where(x => x.Category != null && x.Category.Name == category);
+        }
+
+        if (!string.IsNullOrWhiteSpace(gender))
+        {
+            query = query.Where(x => x.Gender == gender);
+        }
+
+        if (minPrice.HasValue)
+        {
+            query = query.Where(x => x.Price >= minPrice.Value);
+        }
+
+        if (maxPrice.HasValue)
+        {
+            query = query.Where(x => x.Price <= maxPrice.Value);
+        }
+
+        var products = await query
+            .OrderBy(x => x.Name)
+            .Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Description,
+                Category = x.Category!.Name,
+                x.Gender,
+                Sizes = x.SizeStocks
+                    .Where(s => s.Quantity > 0)
+                    .OrderBy(s => s.Size)
+                    .Select(s => new { s.Size, s.Quantity })
+                    .ToList(),
+                x.Color,
+                x.Price,
+                x.ImageUrl,
+                TotalStock = x.SizeStocks.Sum(s => s.Quantity),
+                x.DateAdded
+            })
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var product = await db.Products
+            .AsNoTracking()
+            .Include(x => x.Category)
+            .Include(x => x.SizeStocks)
+            .Where(x => x.Id == id)
+            .Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Description,
+                Category = x.Category!.Name,
+                x.Gender,
+                Sizes = x.SizeStocks
+                    .Where(s => s.Quantity > 0)
+                    .OrderBy(s => s.Size)
+                    .Select(s => new { s.Size, s.Quantity })
+                    .ToList(),
+                x.Color,
+                x.Price,
+                x.ImageUrl,
+                TotalStock = x.SizeStocks.Sum(s => s.Quantity),
+                x.DateAdded,
+                x.CategoryId
+            })
+            .FirstOrDefaultAsync();
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        return Ok(product);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Create(CreateProductRequest request)
+    {
+        var categoryExists = await db.Categories.AnyAsync(x => x.Id == request.CategoryId);
+        if (!categoryExists)
+        {
+            return BadRequest(new { message = "Invalid category." });
+        }
+
+        var product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            CategoryId = request.CategoryId,
+            Gender = request.Gender,
+            Color = request.Color,
+            Price = request.Price,
+            ImageUrl = request.ImageUrl,
+            SizeStocks = request.SizeStocks
+                .Where(x => x.Quantity > 0 && !string.IsNullOrWhiteSpace(x.Size))
+                .GroupBy(x => NormalizeSize(x.Size))
+                .Select(x => new ProductSizeStock { Size = x.Key, Quantity = x.Sum(i => i.Quantity) })
+                .ToList(),
+            DateAdded = DateTime.UtcNow
+        };
+
+        db.Products.Add(product);
+        await db.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetAll), new { id = product.Id }, product);
+    }
+
+    [HttpPut("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Update(int id, CreateProductRequest request)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        var categoryExists = await db.Categories.AnyAsync(x => x.Id == request.CategoryId);
+        if (!categoryExists)
+        {
+            return BadRequest(new { message = "Invalid category." });
+        }
+
+        product.Name = request.Name;
+        product.Description = request.Description;
+        product.CategoryId = request.CategoryId;
+        product.Gender = request.Gender;
+        product.Color = request.Color;
+        product.Price = request.Price;
+        product.ImageUrl = request.ImageUrl;
+
+        var existingStocks = await db.ProductSizeStocks
+            .Where(x => x.ProductId == id)
+            .ToListAsync();
+        db.ProductSizeStocks.RemoveRange(existingStocks);
+
+        var refreshedStocks = request.SizeStocks
+            .Where(x => x.Quantity > 0 && !string.IsNullOrWhiteSpace(x.Size))
+            .GroupBy(x => NormalizeSize(x.Size))
+            .Select(x => new ProductSizeStock { ProductId = id, Size = x.Key, Quantity = x.Sum(i => i.Quantity) })
+            .ToList();
+
+        await db.ProductSizeStocks.AddRangeAsync(refreshedStocks);
+
+        await db.SaveChangesAsync();
+        return Ok(product);
+    }
+
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var product = await db.Products.FindAsync(id);
+        if (product is null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+
+        db.Products.Remove(product);
+        await db.SaveChangesAsync();
+        return Ok(new { message = "Product deleted." });
+    }
+
+    private static string NormalizeSize(string value)
+    {
+        var normalized = value.Trim().ToLowerInvariant();
+        return normalized switch
+        {
+            "s" or "small" => "Small",
+            "m" or "medium" => "Medium",
+            "l" or "large" => "Large",
+            "xl" or "extra large" => "XL",
+            _ => value.Trim()
+        };
+    }
+
+    public record CreateProductRequest(
+        string Name,
+        string Description,
+        int CategoryId,
+        string Gender,
+        string Color,
+        decimal Price,
+        string ImageUrl,
+        List<SizeQuantityViewModel> SizeStocks);
+}

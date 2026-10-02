@@ -1,0 +1,143 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+using VelvetVogueclothingstore.Models;
+
+namespace VelvetVogueclothingstore.Controllers
+{
+    public class HomeController : Controller
+    {
+        private readonly ApplicationDbContext _db;
+
+        public HomeController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
+        public IActionResult Index()
+        {
+            return View("Home", BuildHomeViewModel());
+        }
+
+        public IActionResult Home()
+        {
+            return View(BuildHomeViewModel());
+        }
+
+        public IActionResult Products()
+        {
+            return View();
+        }
+
+        public IActionResult Cart()
+        {
+            return View();
+        }
+
+        public IActionResult Account()
+        {
+            return View();
+        }
+
+        public IActionResult Orders()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+
+        [HttpGet("system-admin/signin")]
+        public IActionResult AdminLogin()
+        {
+            if (User.Identity?.IsAuthenticated == true && !User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private HomeViewModel BuildHomeViewModel()
+        {
+            var lastWeek = DateTime.UtcNow.AddDays(-7);
+
+            var featuredProducts = _db.Products
+                .AsNoTracking()
+                .OrderBy(p => p.Id)
+                .Take(8)
+                .ToList();
+
+            var newArrivalImagePaths = new[]
+            {
+                "/img/cat-1.jpg",
+                "/img/cat-2.jpg",
+                "/img/cat-3.jpg",
+                "/img/cat-4.jpg"
+            };
+
+            var newArrivalCandidates = _db.Products
+                .AsNoTracking()
+                .Where(p => p.DateAdded >= lastWeek)
+                .OrderByDescending(p => p.DateAdded)
+                .Take(4)
+                .ToList();
+
+            var newArrivals = newArrivalCandidates
+                .Select((p, index) => new HomeProductCardViewModel
+                {
+                    Name = p.Name,
+                    Price = p.Price,
+                    ImageUrl = newArrivalImagePaths[index % newArrivalImagePaths.Length]
+                })
+                .ToList();
+
+            var categories = _db.Products
+                .AsNoTracking()
+                .Where(p => !string.IsNullOrWhiteSpace(p.Category))
+                .Select(p => p.Category)
+                .Distinct()
+                .OrderBy(c => c)
+                .Take(10)
+                .ToList();
+
+            return new HomeViewModel
+            {
+                Categories = categories,
+                FeaturedProducts = featuredProducts,
+                NewArrivalProducts = newArrivals,
+                HeroSlides =
+                [
+                    new HeroSlideViewModel
+                    {
+                        Title = "10% Off Your First Order",
+                        Subtitle = "Fashionable Dress",
+                        ImageUrl = "/img/categories/hero/hero-1.jpg"
+                    },
+                    new HeroSlideViewModel
+                    {
+                        Title = "Latest Collection",
+                        Subtitle = "Reasonable Price",
+                        ImageUrl = "/img/categories/hero/hero-2.jpg"
+                    }
+                ]
+            };
+        }
+    }
+}

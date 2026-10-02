@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div id="authStatus" class="alert alert-info d-none"></div>
+
+<div id="userDetailsSection" class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">User Details</h4>
+            <button id="logoutBtn" class="btn btn-sm btn-outline-secondary" type="button">Logout</button>
+        </div>
+
+        <form id="profileForm" class="row g-3 mt-1 mb-2">
+            <div class="col-md-6">
+                <label class="form-label">User Name</label>
+                <input id="profileFullName" class="form-control" name="fullName" readonly />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input id="profileEmail" class="form-control" name="email" type="email" readonly />
+            </div>
+            <div class="col-12 d-flex gap-2">
+                <button id="editProfileBtn" class="btn btn-outline-dark" type="button">Edit</button>
+                <button id="saveProfileBtn" class="btn btn-dark d-none" type="submit">Save Profile</button>
+                <button id="cancelProfileBtn" class="btn btn-outline-secondary d-none" type="button">Cancel</button>
+            </div>
+        </form>
+
+        <hr />
+
+        <form id="addressForm" class="row g-3 mt-1">
+            <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input class="form-control" name="recipientName" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Mobile Number</label>
+                <input class="form-control" name="phoneNumber" required />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 1</label>
+                <input class="form-control" name="line1" required />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 2</label>
+                <input class="form-control" name="line2" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input class="form-control" name="city" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input class="form-control" name="state" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Postal Code</label>
+                <input class="form-control" name="postalCode" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Country</label>
+                <input class="form-control" name="country" required />
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" id="isDefaultShipping" name="isDefaultShipping" value="true" />
+                    <label class="form-check-label" for="isDefaultShipping">Set as default</label>
+                </div>
+            </div>
+            <div class="col-12 d-grid d-md-block">
+                <button class="btn btn-dark" type="submit">Save Details</button>
+            </div>
+        </form>
+
+        <div class="mt-3">
+            <h6>Saved Details</h6>
+            <ul id="addressList" class="list-group"></ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+    <script>
+        window.StoreApp.initAccountPage();
+    </script>
+}

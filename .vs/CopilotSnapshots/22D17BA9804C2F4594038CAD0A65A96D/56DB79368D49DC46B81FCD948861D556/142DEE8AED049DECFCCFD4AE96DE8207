@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Admin Sign In";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Admin Sign In</h4>
+                <p class="text-muted small mb-3">Restricted access. Authorized administrators only.</p>
+
+                <div id="adminLoginAlert" class="alert alert-danger d-none"></div>
+
+                <form id="adminLoginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" name="email" type="email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" name="password" type="password" required />
+                    </div>
+                    <button class="btn btn-dark w-100" type="submit">Sign In as Admin</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const form = document.getElementById("adminLoginForm");
+            const alertBox = document.getElementById("adminLoginAlert");
+
+            if (!form) return;
+
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                alertBox.classList.add("d-none");
+
+                const payload = Object.fromEntries(new FormData(form).entries());
+
+                try {
+                    const response = await fetch("/api/auth/admin-login", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const text = await response.text();
+                    const data = text ? JSON.parse(text) : null;
+
+                    if (!response.ok) {
+                        throw new Error(data?.message || "Login failed");
+                    }
+
+                    window.location.href = "/Home/Admin";
+                } catch (e) {
+                    alertBox.textContent = e.message;
+                    alertBox.classList.remove("d-none");
+                }
+            });
+        })();
+    </script>
+}

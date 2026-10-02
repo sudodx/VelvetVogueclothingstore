@@ -1,0 +1,46 @@
+﻿## From full 'Debug' logs:
+'VelvetVogueclothingstore.exe' (CoreCLR: DefaultDomain): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Private.CoreLib.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Users\a-ssebastiampillai\source\repos\VelvetVogueclothingstore\VelvetVogueclothingstore\bin\Debug\net10.0\VelvetVogueclothingstore.dll'. Symbols loaded.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Runtime.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'c:\program files\microsoft visual studio\18\professional\common7\ide\extensions\microsoft\managedprojectsystem\HotReload\net6.0\Microsoft.AspNetCore.Watch.BrowserRefresh.dll'. 
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'c:\program files\microsoft visual studio\18\professional\common7\ide\extensions\microsoft\managedprojectsystem\HotReload\net10.0\Microsoft.Extensions.DotNetDeltaApplier.dll'. 
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Linq.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Runtime.Loader.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Console.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Private.Uri.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.IO.Pipes.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Collections.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Runtime.InteropServices.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Collections.Concurrent.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Threading.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Threading.Overlapped.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Security.AccessControl.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Security.Principal.Windows.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.Security.Claims.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'c:\program files\microsoft visual studio\18\professional\common7\ide\extensions\microsoft\web tools\projectsystem\net7.0\Microsoft.WebTools.ApiEndpointDiscovery.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\Microsoft Visual Studio\18\Professional\Common7\IDE\Extensions\Microsoft\Web Tools\Browser Link\Microsoft.WebTools.BrowserLink.Net.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.Hosting.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Http.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Routing.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.NETCore.App\10.0.12\System.ComponentModel.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.Features.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.DependencyInjection.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Users\a-ssebastiampillai\source\repos\VelvetVogueclothingstore\VelvetVogueclothingstore\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.Logging.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.Diagnostics.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.Extensions.Configuration.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Mvc.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Mvc.Core.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Authentication.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Authentication.Cookies.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Authorization.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Authorization.Policy.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Hosting.Abstractions.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.HttpsPolicy.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.StaticAssets.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Mvc.ViewFeatures.dll'. Symbol loading disabled by Include/Exclude setting.
+'VelvetVogueclothingstore.exe' (CoreCLR: clrhost): Loaded 'C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\10.0.12\Microsoft.AspNetCore.Diagnostics.dll'. Symbol loading disabled by Include/Exclude setting.
+An unhandled exception of type 'System.ExecutionEngineException' occurred in Unknown Module.
+
+The program '[19932] VelvetVogueclothingstore.exe' has exited with code 4294967295 (0xffffffff).

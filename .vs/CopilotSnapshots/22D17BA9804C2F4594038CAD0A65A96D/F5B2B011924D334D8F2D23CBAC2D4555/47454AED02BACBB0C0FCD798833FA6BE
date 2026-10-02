@@ -1,0 +1,124 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VelvetVogueclothingstore.Data;
+
+namespace VelvetVogueclothingstore.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize(Roles = "Admin")]
+public class AdminController(ApplicationDbContext db) : ControllerBase
+{
+    [HttpGet("overview")]
+    public async Task<IActionResult> Overview()
+    {
+        var userCount = await db.UserAccounts.CountAsync();
+        var productCount = await db.Products.CountAsync();
+        var orderCount = await db.Orders.CountAsync();
+        var pendingOrderCount = await db.Orders.CountAsync(x => x.Status == "Pending");
+        var cartItemCount = await db.CartItems.CountAsync();
+
+        return Ok(new
+        {
+            userCount,
+            productCount,
+            orderCount,
+            pendingOrderCount,
+            cartItemCount
+        });
+    }
+
+    [HttpGet("orders")]
+    public async Task<IActionResult> AllOrders()
+    {
+        var orders = await db.Orders
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new
+            {
+                x.Id,
+                x.Status,
+                x.TotalAmount,
+                x.CreatedAtUtc,
+                Customer = x.UserAccount!.FullName,
+                CustomerEmail = x.UserAccount.Email,
+                Address = new
+                {
+                    x.UserAddress!.RecipientName,
+                    x.UserAddress.Line1,
+                    x.UserAddress.City,
+                    x.UserAddress.State,
+                    x.UserAddress.PostalCode,
+                    x.UserAddress.Country
+                },
+                Items = x.Items.Select(i => new
+                {
+                    i.ProductId,
+                    i.ProductNameSnapshot,
+                    i.Quantity,
+                    i.UnitPrice,
+                    i.LineTotal
+                })
+            })
+            .ToListAsync();
+
+        return Ok(orders);
+    }
+
+    [HttpPut("orders/{orderId:int}/status")]
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, UpdateOrderStatusRequest request)
+    {
+        var order = await db.Orders.FindAsync(orderId);
+        if (order is null)
+        {
+            return NotFound(new { message = "Order not found." });
+        }
+
+        order.Status = request.Status;
+        await db.SaveChangesAsync();
+
+        return Ok(new { message = "Order status updated." });
+    }
+
+    [HttpGet("cart-items")]
+    public async Task<IActionResult> CartItems()
+    {
+        var cartItems = await db.CartItems
+            .OrderByDescending(x => x.Id)
+            .Select(x => new
+            {
+                x.Id,
+                x.UserAccountId,
+                CustomerName = x.UserAccount!.FullName,
+                CustomerEmail = x.UserAccount.Email,
+                x.ProductId,
+                ProductName = x.Product!.Name,
+                x.Quantity,
+                UnitPrice = x.Product.Price,
+                LineTotal = x.Product.Price * x.Quantity
+            })
+            .ToListAsync();
+
+        return Ok(cartItems);
+    }
+
+    [HttpGet("users")]
+    public async Task<IActionResult> Users()
+    {
+        var users = await db.UserAccounts
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Select(x => new
+            {
+                x.Id,
+                x.FullName,
+                x.Email,
+                x.Role,
+                x.CreatedAtUtc
+            })
+            .ToListAsync();
+
+        return Ok(users);
+    }
+
+    public record UpdateOrderStatusRequest(string Status);
+}
