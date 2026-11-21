@@ -57,22 +57,16 @@ through `image.php`. Give the PHP process write access to that directory.
 For deployment, enable HTTPS and configure backups, log rotation, monitoring
 and appropriate PHP upload/request limits. PHP's built-in server is for local development.
 
-## Original Data and Templates
+## Data and Pages
 
-`backend/setup.php` seeds the original demo categories and four products only
-when those tables are empty. It does not import existing SQL Server users,
-password hashes, carts or orders. Existing production data requires a separate
-data migration and password compatibility/reset strategy.
+`backend/setup.php` seeds the demo categories and four products only when those
+tables are empty. It does not import existing SQL Server users, password hashes,
+carts or orders. Existing production data requires a separate data migration
+and password compatibility/reset strategy.
 
-```powershell
-node tools/convert-pages.mjs
-```
-
-This regenerates the ten HTML pages and the adapted storefront script from
-the retained Razor source, and copies the original CSS, libraries and product
-photos. It does not overwrite the PHP backend or the hand-written transport
-and page initialization scripts. Edit the HTML directly for ongoing PHP-site
-development; rerunning the converter overwrites generated HTML and store.js.
+The runnable site is maintained directly in `public/` (HTML, CSS and JavaScript)
+and `backend/` (PHP). It does not require the ASP.NET/C# project or a page
+converter.
 
 ## Verification
 
