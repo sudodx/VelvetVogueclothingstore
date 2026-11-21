@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login - Velvet Vogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet"><link href="assets/css/site.css" rel="stylesheet">
+<link href="assets/css/php-site.css" rel="stylesheet"></head><body><header class="border-bottom mb-4"><nav class="navbar navbar-expand-lg navbar-light bg-white container">
+<a class="navbar-brand" href="index.html">Velvet Vogue</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="siteNav"><div class="navbar-nav me-auto">
+<a class="nav-link" href="index.html">Home</a><a class="nav-link" href="products.html">Products</a><a class="nav-link" href="cart.html">Cart</a><a class="nav-link" href="orders.html">Orders</a><a class="nav-link" href="account.html">Account</a><a class="nav-link" href="contact.html">Contact</a>
+</div><a class="nav-link" href="login.html" id="sessionLink">Login</a><a class="nav-link" href="admin-login.html">Admin</a><button type="button" id="adminLogoutBtn" class="btn btn-outline-dark d-none">Logout</button></div></nav></header><main class="container pb-4"><div class="row g-4 justify-content-center">
+    <div class="col-lg-6 col-xl-5">
+        <div class="card">
+            <div class="card-body">
+                <h4>User Login</h4>
+                <form id="loginForm" class="mt-3">
+                    <div class="mb-3">
+                        <label class="form-label">Username (Email)</label>
+                        <input class="form-control" name="email" type="email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" name="password" type="password" required />
+                    </div>
+                    <button class="btn btn-dark" type="submit">Login</button>
+                </form>
+
+                <hr />
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Don't have an account?</span>
+                    <button class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#registerPanel" aria-expanded="false" aria-controls="registerPanel">Register</button>
+                </div>
+
+                <div class="collapse mt-3" id="registerPanel">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input class="form-control" name="fullName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" name="email" type="email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" name="password" type="password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mobile Number</label>
+                            <input class="form-control" name="phoneNumber" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Shipping Address Name</label>
+                            <input class="form-control" name="recipientName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address Line 1</label>
+                            <input class="form-control" name="line1" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address Line 2</label>
+                            <input class="form-control" name="line2" />
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">City</label>
+                                <input class="form-control" name="city" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">State</label>
+                                <input class="form-control" name="state" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Postal Code</label>
+                                <input class="form-control" name="postalCode" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Country</label>
+                                <input class="form-control" name="country" value="Sri Lanka" required />
+                            </div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="registerDefaultShipping" name="isDefaultShipping" value="true" checked />
+                            <label class="form-check-label" for="registerDefaultShipping">Set as default shipping</label>
+                        </div>
+                        <button class="btn btn-outline-dark" type="submit">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="authStatus" class="alert alert-info mt-4 d-none"></div>
+
+</main><footer class="border-top py-3 text-center">&copy; 2026 Velvet Vogue</footer><script src="assets/lib/jquery/dist/jquery.min.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script><script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="assets/js/main.js"></script><script src="assets/js/transport.js"></script>
+<script src="assets/js/store.js"></script><script src="assets/js/pages.js"></script></body></html>

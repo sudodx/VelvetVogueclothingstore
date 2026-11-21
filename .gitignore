@@ -1,0 +1,4 @@
+/backend/uploads/
+/.env
+/node_modules/
+/test-results/

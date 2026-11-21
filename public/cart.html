@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cart - Velvet Vogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet"><link href="assets/css/site.css" rel="stylesheet">
+<link href="assets/css/php-site.css" rel="stylesheet"></head><body><header class="border-bottom mb-4"><nav class="navbar navbar-expand-lg navbar-light bg-white container">
+<a class="navbar-brand" href="index.html">Velvet Vogue</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="siteNav"><div class="navbar-nav me-auto">
+<a class="nav-link" href="index.html">Home</a><a class="nav-link" href="products.html">Products</a><a class="nav-link" href="cart.html">Cart</a><a class="nav-link" href="orders.html">Orders</a><a class="nav-link" href="account.html">Account</a><a class="nav-link" href="contact.html">Contact</a>
+</div><a class="nav-link" href="login.html" id="sessionLink">Login</a><a class="nav-link" href="admin-login.html">Admin</a><button type="button" id="adminLogoutBtn" class="btn btn-outline-dark d-none">Logout</button></div></nav></header><main class="container pb-4"><h2 class="mb-3">Your Cart</h2>
+<div id="cartAlert" class="alert alert-info d-none"></div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle cart-items-table">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:40%">Products</th>
+                        <th style="width:12%">Size</th>
+                        <th style="width:12%">Price</th>
+                        <th style="width:18%">Quantity</th>
+                        <th style="width:12%">Total</th>
+                        <th style="width:6%">Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItemsBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="input-group mb-3">
+            <input id="couponCode" class="form-control" placeholder="Coupon Code" />
+            <button id="applyCouponBtn" class="btn btn-outline-secondary" type="button">Apply Coupon</button>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h4 class="mb-0">Cart Summary</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Subtotal</span>
+                    <strong>LKR <span id="cartSubtotal">0.00</span></strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Shipping</span>
+                    <strong>LKR <span id="cartShipping">0.00</span></strong>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-between fs-5 fw-semibold mb-3">
+                    <span>Total</span>
+                    <span>LKR <span id="cartTotal">0.00</span></span>
+                </div>
+                <button id="checkoutBtn" class="btn btn-dark w-100 py-2">Proceed To Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Checkout</h5>
+        <div class="row g-2 mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Recipient Name</label>
+                <input id="checkoutRecipientName" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input id="checkoutPhoneNumber" class="form-control" />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 1</label>
+                <input id="checkoutLine1" class="form-control" />
+            </div>
+            <div class="col-12">
+                <label class="form-label">Address Line 2</label>
+                <input id="checkoutLine2" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input id="checkoutCity" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input id="checkoutState" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Postal Code</label>
+                <input id="checkoutPostalCode" class="form-control" />
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Country</label>
+                <input id="checkoutCountry" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="checkoutDefaultShipping" />
+                    <label class="form-check-label" for="checkoutDefaultShipping">Set as default</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-2 align-items-end">
+            <div class="col-md-8">
+                <label class="form-label">Shipping Address</label>
+                <select id="checkoutAddress" class="form-select"></select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Payment Method</label>
+                <select id="checkoutPaymentMethod" class="form-select">
+                    <option value="Cash on Delivery" selected>Cash on Delivery</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button id="saveCheckoutAddressBtn" class="btn btn-outline-dark" type="button">Save</button>
+            </div>
+        </div>
+        <small class="text-muted d-block mt-2">Select an address to edit it or fill fields and click Save to add a new one.</small>
+    </div>
+</div>
+
+</main><footer class="border-top py-3 text-center">&copy; 2026 Velvet Vogue</footer><script src="assets/lib/jquery/dist/jquery.min.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script><script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="assets/js/main.js"></script><script src="assets/js/transport.js"></script>
+<script src="assets/js/store.js"></script><script src="assets/js/pages.js"></script></body></html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Velvet Vogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet"><link href="assets/css/site.css" rel="stylesheet">
+<link href="assets/css/php-site.css" rel="stylesheet"></head><body><header class="border-bottom mb-4"><nav class="navbar navbar-expand-lg navbar-light bg-white container">
+<a class="navbar-brand" href="index.html">Velvet Vogue</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="siteNav"><div class="navbar-nav me-auto">
+<a class="nav-link" href="index.html">Home</a><a class="nav-link" href="products.html">Products</a><a class="nav-link" href="cart.html">Cart</a><a class="nav-link" href="orders.html">Orders</a><a class="nav-link" href="account.html">Account</a><a class="nav-link" href="contact.html">Contact</a>
+</div><a class="nav-link" href="login.html" id="sessionLink">Login</a><a class="nav-link" href="admin-login.html">Admin</a><button type="button" id="adminLogoutBtn" class="btn btn-outline-dark d-none">Logout</button></div></nav></header><main class="container pb-4"><div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Admin Sign In</h4>
+                <p class="text-muted small mb-3">Restricted access. Authorized administrators only.</p>
+
+                <div id="adminLoginAlert" class="alert alert-danger d-none"></div>
+
+                <form id="adminLoginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" name="email" type="email" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" name="password" type="password" required />
+                    </div>
+                    <button class="btn btn-dark w-100" type="submit">Sign In as Admin</button>
+                </form>
+
+                <hr />
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Need a new admin account?</span>
+                    <button class="btn btn-outline-dark btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#adminRegisterPanel" aria-expanded="false" aria-controls="adminRegisterPanel">Admin Register</button>
+                </div>
+
+                <div class="collapse mt-3" id="adminRegisterPanel">
+                    <form id="adminRegisterForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input class="form-control" name="fullName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control" name="email" type="email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control" name="password" type="password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Admin Secret Key</label>
+                            <input class="form-control" name="adminSecretKey" type="password" required />
+                        </div>
+                        <button class="btn btn-outline-dark w-100" type="submit">Create Admin Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main><script src="assets/lib/jquery/dist/jquery.min.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script><script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="assets/js/main.js"></script><script src="assets/js/transport.js"></script>
+<script src="assets/js/store.js"></script><script src="assets/js/pages.js"></script></body></html>

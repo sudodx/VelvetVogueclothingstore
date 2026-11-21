@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home - Velvet Vogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="assets/css/style.css" rel="stylesheet"><link href="assets/css/site.css" rel="stylesheet">
+<link href="assets/css/php-site.css" rel="stylesheet"></head><body><header class="border-bottom mb-4"><nav class="navbar navbar-expand-lg navbar-light bg-white container">
+<a class="navbar-brand" href="index.html">Velvet Vogue</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="siteNav"><div class="navbar-nav me-auto">
+<a class="nav-link" href="index.html">Home</a><a class="nav-link" href="products.html">Products</a><a class="nav-link" href="cart.html">Cart</a><a class="nav-link" href="orders.html">Orders</a><a class="nav-link" href="account.html">Account</a><a class="nav-link" href="contact.html">Contact</a>
+</div><a class="nav-link" href="login.html" id="sessionLink">Login</a><a class="nav-link" href="admin-login.html">Admin</a><button type="button" id="adminLogoutBtn" class="btn btn-outline-dark d-none">Logout</button></div></nav></header><main class=" pb-4"><div class="container-fluid">
+    <div class="row bg-secondary py-2 px-xl-5">
+        <div class="col-lg-6 d-none d-lg-block">
+            <div class="d-inline-flex align-items-center">
+                <a class="text-dark" href="#">FAQs</a>
+                <span class="text-muted px-2">|</span>
+                <a class="text-dark" href="#">Help</a>
+                <span class="text-muted px-2">|</span>
+                <a class="text-dark" href="#">Support</a>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center">
+                <a class="text-dark px-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                <a class="text-dark px-2" href="#"><i class="fab fa-twitter"></i></a>
+                <a class="text-dark px-2" href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a class="text-dark px-2" href="#"><i class="fab fa-instagram"></i></a>
+                <a class="text-dark ps-2" href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center py-3 px-xl-5">
+        <div class="col-lg-3 d-none d-lg-block">
+            <a href="index.html" class="text-decoration-none">
+                <h1 class="m-0 display-5 fw-semibold"><span class="text-primary fw-bold border px-3 me-1">V</span>VelvetVogue</h1>
+            </a>
+        </div>
+        <div class="col-lg-6 col-6 text-start">
+            <form action="products.html">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search for products" />
+                    <span class="input-group-text bg-transparent text-primary"><i class="fa fa-search"></i></span>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3 col-6 text-end">
+            <a href="account.html" class="btn border me-2" title="Login">
+                <i class="fas fa-user text-primary"></i>
+            </a>
+            <a href="cart.html" class="btn border">
+                <i class="fas fa-shopping-cart text-primary"></i>
+                <span class="badge">0</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mb-5">
+    <div class="row border-top px-xl-5">
+        <div class="col-lg-3 d-none d-lg-block">
+            <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
+               data-bs-toggle="collapse" href="#navbar-vertical" style="height:65px; margin-top:-1px; padding:0 30px;">
+                <h6 class="m-0">Categories</h6>
+                <i class="fa fa-angle-down text-dark"></i>
+            </a>
+            <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+                <div class="navbar-nav w-100 overflow-hidden" style="height:410px">
+                    <div id="homeCategories"></div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-lg-9">
+            <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                <a href="index.html" class="text-decoration-none d-block d-lg-none">
+                    <h1 class="m-0 display-5 fw-semibold"><span class="text-primary fw-bold border px-3 me-1">V</span>VelvetVogue</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav me-auto py-0">
+                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="products.html" class="nav-item nav-link">Shop</a>
+                        <a href="cart.html" class="nav-item nav-link">Cart</a>
+                        <a href="orders.html" class="nav-item nav-link">Orders</a>
+                        
+                            <a href="account.html" class="nav-item nav-link">User Details</a>
+                        
+                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" style="height:410px"><img class="img-fluid w-100 h-100 object-fit-cover" src="assets/img/categories/jackets/urban-denim-jacket.jpg" alt="Urban Denim Jacket"><div class="carousel-caption"><h2>Velvet Vogue</h2><a href="products.html" class="btn btn-light">Shop Now</a></div></div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Featured Products</span></h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        <div id="featuredProducts" class="row g-3 m-0"></div>
+    </div>
+</div>
+
+<div class="container-fluid pt-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Just Arrived</span></h2>
+    </div>
+    <div class="row px-xl-5 pb-3">
+        <div id="newProducts" class="row g-3 m-0"></div>
+    </div>
+</div>
+</main><footer class="border-top py-3 text-center">&copy; 2026 Velvet Vogue</footer><script src="assets/lib/jquery/dist/jquery.min.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script><script src="assets/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="assets/js/main.js"></script><script src="assets/js/transport.js"></script>
+<script src="assets/js/store.js"></script><script src="assets/js/pages.js"></script></body></html>
